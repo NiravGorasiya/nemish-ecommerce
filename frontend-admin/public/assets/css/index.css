@@ -1,0 +1,10 @@
+.sidebar-component .submenu {
+  display: none; /* Hide by default */
+  padding-left: 20px;
+  transition: display 0.3s ease; /* Smooth transition */
+}
+
+/* Display the submenu when it's active */
+.sidebar-component .submenu.active {
+  display: block;
+}

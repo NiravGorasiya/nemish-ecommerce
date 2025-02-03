@@ -9,27 +9,24 @@ const upload = require("../../utils/imageupload");
 
 router.post("/add", upload.any(), productv, expressValidatorMw, async (req, res, next) => {
     try {
-
         const ctrlData = matchedData(req, { locations: ["body"] });
         if (req.files && req.files.length > 0) {
             ctrlData.productColorImages = ctrlData.productColorImages.map((color, index) => {
 
                 const files = req.files.filter((f) => f.fieldname === `productColorImages[${index}][image]`);
-                
-                const imageFilenames = files.map(file => file.filename);
-                
+
+                const imageFilenames = files.map(file => file.filename);    
+
                 return {
                     ...color,
-                    images: imageFilenames.length > 0 ? imageFilenames : null
+                    images: { image: imageFilenames.length > 0 ? imageFilenames : null, status: imageFilenames[0] ? 'active' : 'inactive' }
                 };
             });
         }
-      
+
         const product = await createProductCtrl(ctrlData);
         return createResponse(req, res, product);
     } catch (error) {
-        console.log(error, 'err');
-
         return next(error);
     }
 });

@@ -35,15 +35,13 @@ const Menu: React.FC<MenuComponentProps> = ({ menuItems }) => {
         <nav className='items-center'>
             <ul className="menu-aside">
                 {menuItems.map((item, index) => {
-                    console.log(item, 'items');
-
                     return (
                         <li
                             key={index}
                             className={`menu-item ${item?.link === pathname ? "active" : ""}`}
                         >
                             <Link
-                                className="menu-link d-flex"
+                                className="menu-link d-flex align-items-center"
                                 to={item?.link? item.link:""}
                                 onClick={(e) => {
                                     if (item.disabled) e.preventDefault();

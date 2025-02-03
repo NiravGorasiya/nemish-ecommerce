@@ -4,8 +4,8 @@ const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../../
 const { convertQuery } = require("../../../utils/paginationUtils");
 
 const createProductCtrl = async (ctrlData) => {
-    console.log(ctrlData, 'ctrlData');
-
+    console.log(ctrlData,'ctrlData');
+    
     const product = await createModelItemQ('Products', ctrlData)
 
     if (ctrlData.size_id.length > 0) {
@@ -16,7 +16,7 @@ const createProductCtrl = async (ctrlData) => {
     }
 
     if (ctrlData.productColorImages.length > 0) {
-        ctrlData.productColorImages?.map(async (color) => {
+        ctrlData.productColorImages?.map(async (color) => {            
             let productColor = { productId: product.Id, color_id: color.color_id, images: color.images }
             await createModelItemQ('ProductColour', productColor)
         })
@@ -85,7 +85,23 @@ const getoneProductCtrl = async (ctrlData) => {
     const product = await findModelItemQ('Products', {
         where: {
             id: ctrlData.productId
-        }
+        },
+        include:[
+            {
+                model: sequelize.models.SubCategories,
+                as: 'SubCategories',
+            },
+            {
+                model: sequelize.models.ProductSizes,
+                as: "sizes",
+                include: [
+                    {
+                        model: sequelize.models.Sizes,
+                        as: 'size'
+                    }
+                ]
+            }
+        ]
     })
     if (!product) {
         throw new DataNotFoundError('Product not exit')

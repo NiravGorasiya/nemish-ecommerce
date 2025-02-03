@@ -41,7 +41,7 @@ module.exports = {
         try {
             const user = await sequelize.models.Users.findOne({
                 where: {
-                    email: email
+                    userEmail: email
                 }
             })
             return user

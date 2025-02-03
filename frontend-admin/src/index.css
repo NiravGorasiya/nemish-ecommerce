@@ -9,6 +9,8 @@ INCLUDE STYLES AND COMPONENTS
 @import url(vendors/select2.min.css); */
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;500;600;700&display=swap");
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 /*RESET*/
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -34,6 +36,40 @@ time, mark, audio, video {
 thead {
   font-weight: 600;
 }
+
+/* Position the dots on the left */
+.slick-dots {
+  position: absolute;
+  left: -60px; /* Adjust spacing to the left */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex !important;
+  flex-direction: column; /* Stack dots vertically */
+  gap: 10px; /* Space between dots */
+}
+
+.slick-dots li {
+  margin: 0;
+  width: auto;
+}
+
+.slick-dots li button {
+  display: none; /* Hide the default dot button */
+}
+
+.slick-dots li img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.slick-dots li.slick-active img {
+  border: 2px solid black; /* Highlight the active dot */
+}
+
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {

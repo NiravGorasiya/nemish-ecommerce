@@ -1,7 +1,14 @@
 import React from 'react';
 import { Search as SearchIcon, Notifications as NotificationsIcon, NightsStay as NightsStayIcon, Cast as CastIcon, Public as PublicIcon, PermIdentity as PermIdentityIcon, Settings as SettingsIcon, AccountBalanceWallet as AccountBalanceWalletIcon, Receipt as ReceiptIcon, HelpOutline as HelpOutlineIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Dropdown } from "react-bootstrap";
 
 const Header = () => {
+    const navigate = useNavigate();
+    const handleLogout =()=>{
+        localStorage.removeItem('authToken')
+        navigate("/login")
+    }
     return (
         <header className="main-header navbar">
             <div className="col-search">
@@ -60,20 +67,32 @@ const Header = () => {
                             </a>
                         </div>
                     </li>
-                    <li className="dropdown nav-item">
-                        <a className="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">
-                            <img className="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User" />
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a className="dropdown-item" href="#"><PermIdentityIcon /> Edit Profile</a>
-                            <a className="dropdown-item" href="#"><SettingsIcon /> Account Settings</a>
-                            <a className="dropdown-item" href="#"><AccountBalanceWalletIcon /> Wallet</a>
-                            <a className="dropdown-item" href="#"><ReceiptIcon /> Billing</a>
-                            <a className="dropdown-item" href="#"><HelpOutlineIcon /> Help center</a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item text-danger" href="#"><ExitToAppIcon /> Logout</a>
-                        </div>
-                    </li>
+                    <Dropdown>
+                        <Dropdown.Toggle as="a" className="nav-link dropdown-toggle">
+                            <img className="img-xs rounded-circle" src="/assets/imgs/people/avatar2.jpg" alt="User" />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu align="end">
+                            <Dropdown.Item as={Link} to="/profile">
+                                <PermIdentityIcon className="me-2" /> Edit Profile
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/settings">
+                                <SettingsIcon className="me-2" /> Account Settings
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/wallet">
+                                <AccountBalanceWalletIcon className="me-2" /> Wallet
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/billing">
+                                <ReceiptIcon className="me-2" /> Billing
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/help">
+                                <HelpOutlineIcon className="me-2" /> Help Center
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item className="text-danger" onClick={handleLogout}>
+                                <ExitToAppIcon className="me-2" /> Logout
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </ul>
             </div>
         </header>

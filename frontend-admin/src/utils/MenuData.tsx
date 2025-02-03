@@ -14,22 +14,21 @@ interface MenuItem {
 }
 
 export const menuItems: MenuItem[] = [
-    { title: "Dashboard", icon: "home", link: "/" },
+    { title: "Dashboard", icon: "home", link: "/dashboard" },
     {
         title: "Category",
         icon: "shopping_bag",
         link: "/category"
     },
     {
-        title: "Products",
+        title: "Color",
         icon: "shopping_bag",
-        link: "#",
-        submenu: [
-            { title: "Product List", link: "#" },
-            { title: "Product Grid", link: "#" },
-            { title: "Product Grid 2", link: "#" },
-            { title: "Categories", link: "#" },
-        ],
+        link: "/color"
+    },
+    {
+        title: "Product",
+        icon: "add_box",
+        link: "/product",
     },
     {
         title: "Orders",

@@ -4,6 +4,7 @@ import { subCategorySlice } from './slice/subCategory';
 import { productSlice } from './slice/productSlice';
 import { authApi } from './slice/autheSlice';
 import { colorSlice } from './slice/colorSlice';
+import { sizeSlice } from './slice/sizeSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         [subCategorySlice.reducerPath]: subCategorySlice.reducer,
         [productSlice.reducerPath]:productSlice.reducer,
         [authApi.reducerPath]:authApi.reducer,
+        [sizeSlice.reducerPath]:sizeSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -19,6 +21,7 @@ export const store = configureStore({
             .concat(subCategorySlice.middleware)
             .concat(productSlice.middleware)
             .concat(authApi.middleware)
+            .concat(sizeSlice.middleware)
             .concat(colorSlice.middleware)
 
 })

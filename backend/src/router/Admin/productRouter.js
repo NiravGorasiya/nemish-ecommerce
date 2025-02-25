@@ -7,24 +7,10 @@ const { createProductCtrl, getAllProdctCtrl, updateProductCtrl, deleteProductCtr
 const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
 const upload = require("../../utils/imageupload");
 
-router.post("/add", upload.any(), productv, expressValidatorMw, async (req, res, next) => {
+router.post("/add", upload.array("images", 10), productv, expressValidatorMw, async (req, res, next) => {
     try {
         const ctrlData = matchedData(req, { locations: ["body"] });
-        if (req.files && req.files.length > 0) {
-            ctrlData.productColorImages = ctrlData.productColorImages.map((color, index) => {
-
-                const files = req.files.filter((f) => f.fieldname === `productColorImages[${index}][image]`);
-
-                const imageFilenames = files.map(file => file.filename);    
-
-                return {
-                    ...color,
-                    images: { image: imageFilenames.length > 0 ? imageFilenames : null, status: imageFilenames[0] ? 'active' : 'inactive' }
-                };
-            });
-        }
-
-        const product = await createProductCtrl(ctrlData);
+        const product = await createProductCtrl(ctrlData, req.files);
         return createResponse(req, res, product);
     } catch (error) {
         return next(error);
@@ -41,11 +27,11 @@ router.get("/all", getProductV, expressValidatorMw, async (req, res, next) => {
     }
 });
 
-router.put("/update/:id", productv, expressValidatorMw, async (req, res, next) => {
+router.put("/update/:productId", upload.array("images",10), productv, expressValidatorMw, async (req, res, next) => {
     try {
         const ctrlData = matchedData(req, { locations: ["body"] });
-        ctrlData.productId = req.params.id
-        const attribute = await updateProductCtrl(ctrlData)
+        const productId = req.params.productId
+        const attribute = await updateProductCtrl(productId, ctrlData, req.files)
         return successResponce(req, res, attribute)
     } catch (error) {
         return next(error);

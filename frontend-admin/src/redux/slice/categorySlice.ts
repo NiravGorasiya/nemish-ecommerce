@@ -18,7 +18,7 @@ export interface apiResponse {
 
 export const categorySlice = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/category" }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${process.env.REACT_APP_BACKEND_URL}/category` }),
     tagTypes: ['Category'],
     endpoints: (builder) => ({
         getCategories: builder.query<apiResponse, void>({

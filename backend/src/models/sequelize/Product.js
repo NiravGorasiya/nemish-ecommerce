@@ -14,7 +14,11 @@ try {
                         primaryKey: true,
                         autoIncrement: true,
                     },
-                    subcategory_id: {
+                    categoryId: {
+                        type: DataTypes.INTEGER,
+                        allowNull: false
+                    },
+                    subcategoryId: {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                     },
@@ -30,6 +34,14 @@ try {
                         type: DataTypes.STRING,
                         allowNull: false
                     },
+                    isActive: {
+                        type: DataTypes.BOOLEAN,
+                        allowNull: false
+                    },
+                    stockQuantity: {
+                        type: DataTypes.INTEGER,
+                        allowNull: true
+                    },
                     SKU: {
                         type: DataTypes.INTEGER,
                         allowNull: false
@@ -38,7 +50,7 @@ try {
                         type: DataTypes.FLOAT,
                         allowNull: false
                     },
-                    final_price: {
+                    finalPrice: {
                         type: DataTypes.FLOAT,
                         allowNull: false
                     },
@@ -62,7 +74,7 @@ try {
             Products.references = async (models, sequelize) => {
                 try {
                     const queryInterface = sequelize.getQueryInterface();
-                    await queryInterface.changeColumn(TABLENAME, "subcategory_id", {
+                    await queryInterface.changeColumn(TABLENAME, "subcategoryId", {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                         references: {
@@ -79,19 +91,19 @@ try {
             };
 
 
-            Products.associate =  (models) => {
-                 Products.belongsTo(models.SubCategories, {
-                    foreignKey: "subcategory_id",
+            Products.associate = (models) => {
+                Products.belongsTo(models.SubCategories, {
+                    foreignKey: "subcategoryId",
                     as: "SubCategories",
                 });
                 Products.hasMany(models.ProductSizes, {
                     foreignKey: 'productId',
                     as: "sizes",
                 }),
-                Products.hasMany(models.ProductColour, {
-                    foreignKey: 'productId',
-                    as: "colour",
-                })
+                    Products.hasMany(models.ProductColours, {
+                        foreignKey: 'productId',
+                        as: "colours",
+                    })
             };
             return Products;
         }

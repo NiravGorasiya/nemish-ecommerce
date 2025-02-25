@@ -1,21 +1,21 @@
 import React from 'react';
 import Sidebar from '../../layouts/commonComponent/Sidebar';
 import Header from '../../layouts/commonComponent/Header';
-import { useDeleteCategoryMutation } from '../../redux/slice/categorySlice';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import Footer from '../../layouts/commonComponent/Footer';
-import { useGetProductQuery } from '../../redux/slice/productSlice';
+import { useDeleteProductMutation, useGetProductQuery } from '../../redux/slice/productSlice';
 import { useNavigate } from 'react-router-dom';
 
 const ProductList = () => {
-    const { data } = useGetProductQuery();
+    const { data, refetch } = useGetProductQuery();
     const navigate = useNavigate();
+    const [deleteProduct] = useDeleteProductMutation();
 
-    const [deleteCategory] = useDeleteCategoryMutation();
-    const categorys = data?.info?.rows
+    const products = data?.info?.rows
 
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
-        await deleteCategory(id)
+        await deleteProduct(id)
+        refetch()
     }
 
     const handleEdit = (category: { Id: number, name: string }) => {
@@ -34,7 +34,7 @@ const ProductList = () => {
                 <section className="content-main">
                     <div className="content-header">
                         <div>
-                            <h2 className="content-title card-title">Category List</h2>
+                            <h2 className="content-title card-title">Product List</h2>
                             <p>Product List.</p>
                         </div>
                         <div>
@@ -43,45 +43,41 @@ const ProductList = () => {
                     </div>
                     <div className="card mb-4">
                         <header className="card-header">
-                            <Row className=" align-items-center py-2">
-                                <div className="col col-check flex-grow-0">
-                                    <div className="form-check ms-2">
-                                        <input className="form-check-input" type="checkbox" value="" />
-                                    </div>
-                                </div>
-                                <Col className="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                            <Row className="align-items-center py-2">
+                                <Col lg={3} sm={4} xs={8} className="me-auto mb-md-0 mb-3">
                                     Product name
                                 </Col>
-                                <Col className="col-md-2 col-6">
-                                    Created
+                                <Col lg={2} sm={2} xs={4} className="me-auto mb-md-0 mb-3">
+                                    Sku
                                 </Col>
-                                <Col className="col-md-2 col-6">
-                                    Updated
+                                <Col lg={2} sm={2} xs={4}>
+                                    Price
                                 </Col>
-                                <Col className="col-md-2 col-6">
+                                <Col lg={3} sm={2} xs={4}>
+                                    status
+                                </Col>
+                                <Col lg={2} sm={2} xs={4}>
                                     Actions
                                 </Col>
                             </Row>
                         </header>
                         <div className="card-body">
-                            {categorys?.map((product, index) => (
+                            {products?.map((product: any, index: number) => (
                                 <article className="itemlist">
                                     <Row key={index} className="align-items-center">
-                                        <Col xs={1}>
-                                            <Form.Check type="checkbox" />
-                                        </Col>
-                                        <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
-                                            <div className="info">
-                                                <h6 className="mb-0">{product.name}</h6>
-                                            </div>
+                                        <Col lg={3} sm={4} xs={8} className="flex-grow-1 col-name">
+                                            <h6 className="mb-0">{product.name}</h6>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-date">
-                                            <span>{new Date(product.createdAt).toLocaleDateString()}</span>
+                                            <span>{product.SKU}</span>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-date">
-                                            <span>{new Date(product.updatedAt).toLocaleDateString()}</span>
+                                            <span>{product.final_price}</span>
                                         </Col>
-                                        <Col lg={2} sm={2} xs={4} className="col-action text-end">
+                                        <Col lg={2} sm={2} xs={4} className="col-date">
+                                            <span>{product.status}</span>
+                                        </Col>
+                                        <Col lg={3} sm={2} xs={4} className="col-action text-end">
                                             <Button
                                                 variant='brand'
                                                 size="sm"

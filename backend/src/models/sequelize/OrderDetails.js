@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 const logger = require("../../config/logger");
 
-const TABLENAME = "Attributes";
+const TABLENAME = "OrdersDetails";
 
 try {
     module.exports = {
         defineModel: async (sequelize) => {
-            const Attributes = await sequelize.define(
+            const OrdersDetails = await sequelize.define(
                 TABLENAME,
                 {
                     Id: {
@@ -14,20 +14,27 @@ try {
                         primaryKey: true,
                         autoIncrement: true,
                     },
-                    name: {
-                        type: DataTypes.STRING,
-                        allowNull: true
+                    orderId: {
+                        type: DataTypes.INTEGER,
+                        allowNull: false
                     },
                     productId: {
-                        type: DataTypes.STRING,
+                        type: DataTypes.INTEGER,
                         allowNull: false
+                    }
+                },
+                {
+                    hooks: {
+                        beforeCount(options) {
+                            options.raw = true;
+                        }
                     }
                 },
                 {
                     tableName: TABLENAME
                 }
             )
-            return Attributes;
+            return OrdersDetails;
         }
     }
 } catch (error) {

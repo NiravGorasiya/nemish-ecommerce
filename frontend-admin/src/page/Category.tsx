@@ -6,7 +6,7 @@ import { Row, Col, Button, Form, Modal } from 'react-bootstrap';
 import Footer from '../layouts/commonComponent/Footer';
 
 const Category: React.FC = () => {
-    const { data } = useGetCategoriesQuery();
+    const { data ,refetch} = useGetCategoriesQuery();
     const [isPopupVisible, setPopupVisible] = useState<boolean>(false)
     const [name, setName] = useState('')
     const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -16,8 +16,11 @@ const Category: React.FC = () => {
     const [updateCategory] = useUpdateCategoryMutation()
     const categorys = data?.info?.rows
 
+    console.log("categorydata",categorys);
+    
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
         await deleteCategory(id)
+        refetch()
     }
 
     const handleEdit = (category: { Id: number, name: string }) => {
@@ -57,11 +60,6 @@ const Category: React.FC = () => {
                     <div className="card mb-4">
                         <header className="card-header">
                             <Row className=" align-items-center py-2">
-                                <div className="col col-check flex-grow-0">
-                                    <div className="form-check ms-2">
-                                        <input className="form-check-input" type="checkbox" value="" />
-                                    </div>
-                                </div>
                                 <Col className="col-md-3 col-12 me-auto mb-md-0 mb-3">
                                     Category
                                 </Col>
@@ -80,9 +78,6 @@ const Category: React.FC = () => {
                             {categorys?.map((category, index) => (
                                 <article className="itemlist">
                                     <Row key={index} className="align-items-center">
-                                        <Col xs={1}>
-                                            <Form.Check type="checkbox" />
-                                        </Col>
                                         <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
                                             <div className="info">
                                                 <h6 className="mb-0">{category.name}</h6>

@@ -20,6 +20,10 @@ try {
             type: DataTypes.STRING,
             allowNull: true,
           },
+          phone: {
+            type: DataTypes.STRING,
+            allowNull: true
+          },
           userEmail: {
             type: DataTypes.STRING,
             allowNull: true,

@@ -14,11 +14,11 @@ try {
                         primaryKey: true,
                         autoIncrement: true,
                     },
-                    product_id: {
+                    productId: {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                     },
-                    color_id: {
+                    colorId: {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                     },
@@ -35,7 +35,7 @@ try {
             ProductDetails.references = async (models, sequelize) => {
                 try {
                     const queryInterface = sequelize.getQueryInterface();
-                    await queryInterface.changeColumn(TABLENAME, "product_id", {
+                    await queryInterface.changeColumn(TABLENAME, "productId", {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                         references: {
@@ -45,7 +45,7 @@ try {
                         onUpdate: "CASCADE",
                         onDelete: "CASCADE",
                     });
-                    await queryInterface.changeColumn(TABLENAME, "color_id", {
+                    await queryInterface.changeColumn(TABLENAME, "colorId", {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                         references: {
@@ -64,11 +64,11 @@ try {
 
             ProductDetails.associate = (models) => {
                 ProductDetails.belongsTo(models.Products, {
-                    foreignKey: "product_id",
+                    foreignKey: "productId",
                     as: "Products",
                 });
                 ProductDetails.belongsTo(models.Colours, {
-                    foreignKey: "color_id",
+                    foreignKey: "colorId",
                     as: "Colours",
                 });
             };

@@ -21,9 +21,19 @@ export const menuItems: MenuItem[] = [
         link: "/category"
     },
     {
+        title: "SubCategory",
+        icon: "shopping_bag",
+        link: "/subcategory"
+    },
+    {
         title: "Color",
         icon: "shopping_bag",
         link: "/color"
+    },
+    {
+        title: "Size",
+        icon: "shopping_bag",
+        link: "/size"
     },
     {
         title: "Product",
@@ -41,54 +51,5 @@ export const menuItems: MenuItem[] = [
             { title: "Order Tracking", link: "#" },
             { title: "Invoice", link: "#" },
         ],
-    },
-    {
-        title: "Sellers",
-        icon: "store",
-        link: "#",
-        submenu: [
-            { title: "Sellers Cards", link: "#" },
-            { title: "Sellers List", link: "#" },
-            { title: "Seller Profile", link: "#" },
-        ],
-    },
-    {
-        title: "Add Product",
-        icon: "add_box",
-        link: "/addproduct",
-        submenu: [
-            { title: "Add Product 1", link: "/product" }
-        ],
-    },
-    {
-        title: "Transactions",
-        icon: "monetization_on",
-        link: "#",
-        submenu: [
-            { title: "Transaction 1", link: "/transaction" }
-        ],
-    },
-    {
-        title: "Account",
-        icon: "person",
-        link: "#",
-        submenu: [
-            { title: "User Login", link: "/login" },
-            { title: "User Registration", link: "/registration" },
-            { title: "Error 404", link: "#" },
-        ],
-    },
-    { title: "Reviews", icon: "comment", link: "/review" },
-    { title: "Brands", icon: "stars", link: "/brands" },
-    { title: "Statistics", icon: "pie_chart", link: "/statistics", disabled: true },
-    {
-        title: "Settings",
-        icon: "settings",
-        link: "#",
-        submenu: [
-            { title: "Setting Sample 1", link: "/settings" },
-            { title: "Setting Sample 2", link: "/setting" },
-        ],
-    },
-    { title: "Starter Page", icon: "local_offer", link: "#" },
+    }
 ];

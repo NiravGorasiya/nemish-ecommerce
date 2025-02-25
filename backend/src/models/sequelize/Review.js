@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 const logger = require("../../config/logger");
 
-const TABLENAME = "ProductSizes";
+const TABLENAME = "Reviews";
 
 try {
     module.exports = {
         defineModel: async (sequelize) => {
-            const ProductSizes = await sequelize.define(
+            const Reviews = await sequelize.define(
                 TABLENAME,
                 {
                     Id: {
@@ -16,18 +16,33 @@ try {
                     },
                     productId: {
                         type: DataTypes.INTEGER,
-                        allowNull: false
+                        allowNull: false,
                     },
-                    sizeId: {
+                    userId: {
                         type: DataTypes.INTEGER,
                         allowNull: false
                     },
+                    rating: {
+                        type: DataTypes.STRING,
+                        allowNull: false
+                    },
+                    text: {
+                        type: DataTypes.TEXT,
+                        allowNull: false
+                    }
                 },
                 {
-                    tableName: TABLENAME,
+                    hooks: {
+                        beforeCount(options) {
+                            options.raw = true;
+                        }
+                    }
+                },
+                {
+                    tableName: TABLENAME
                 }
-            );
-            ProductSizes.references = async (models, sequelize) => {
+            )
+            Reviews.references = async (models, sequelize) => {
                 try {
                     const queryInterface = sequelize.getQueryInterface();
                     await queryInterface.changeColumn(TABLENAME, "productId", {
@@ -40,11 +55,11 @@ try {
                         onUpdate: "CASCADE",
                         onDelete: "CASCADE",
                     });
-                    await queryInterface.changeColumn(TABLENAME, "sizeId", {
+                    await queryInterface.changeColumn(TABLENAME, "userId", {
                         type: DataTypes.INTEGER,
                         allowNull: false,
                         references: {
-                            model: "Sizes",
+                            model: "Users",
                             key: "Id",
                         },
                         onUpdate: "CASCADE",
@@ -55,21 +70,21 @@ try {
                     throw error;
                 }
             };
-            ProductSizes.associate = (models) => {
-                ProductSizes.belongsTo(models.Products, {
+
+
+            Reviews.associate =  (models) => {
+                Reviews.belongsTo(models.Products, {
                     foreignKey: "productId",
                     as: "Products",
                 });
-                ProductSizes.belongsTo(models.Sizes, {
-                    foreignKey: "sizeId",
-                    as: "size",
+                Reviews.belongsTo(models.Users, {
+                    foreignKey: "userId",
+                    as: "Users",
                 });
-
             };
-            return ProductSizes;
+            return Reviews;
         }
-
     }
 } catch (error) {
-    logger.error(error);
+    logger.error(e)
 }

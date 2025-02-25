@@ -19,7 +19,7 @@ export interface apiResponse {
 
 export const colorSlice = createApi({
     reducerPath: 'color api',
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/colour" }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${process.env.REACT_APP_BACKEND_URL}/colour` }),
     tagTypes: ['Colour'],
     endpoints: (builder) => ({
         getColour: builder.query<apiResponse, void>({

@@ -3,31 +3,27 @@ import Sidebar from '../layouts/commonComponent/Sidebar';
 import Header from '../layouts/commonComponent/Header';
 import { Row, Col, Button, Form, Modal } from 'react-bootstrap';
 import Footer from '../layouts/commonComponent/Footer';
-import { useCreateColourMutation, useDeleteColourMutation, useGetColourQuery, useUpdateColourMutation } from '../redux/slice/colorSlice';
+import { useCreateSizeMutation, useDeleteSizeMutation, useGetSizesQuery, useUpdateSizeMutation } from '../redux/slice/sizeSlice';
 
-const Color = () => {
-    const { data, refetch } = useGetColourQuery();
+const Size = () => {
+    const { data,refetch } = useGetSizesQuery();
     const [isPopupVisible, setPopupVisible] = useState<boolean>(false)
     const [name, setName] = useState('')
-    const [hexCode, setHexCode] = useState('')
-    const [colourId, setColourId] = useState<number | null>(null);
+    const [sizeId, setSizeId] = useState<number | null>(null);
 
-    const [deleteColour] = useDeleteColourMutation();
-    const [createColour] = useCreateColourMutation();
-    const [updateColour] = useUpdateColourMutation();
-
-    const colours = data?.info?.rows
+    const [deleteSize] = useDeleteSizeMutation();
+    const [createSize] = useCreateSizeMutation()
+    const [updateSize] = useUpdateSizeMutation()
+    const sizes = data?.info?.rows
 
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
-        await deleteColour(id)
+        await deleteSize(id)
         refetch()
     }
 
-    const handleEdit = (colour: { Id: number, name: string, hex_code: string }) => {
-        console.log(colour, 'cate');
-        setHexCode(colour.hex_code)
-        setName(colour.name);
-        setColourId(colour.Id);
+    const handleEdit = (category: { Id: number, name: string }) => {
+        setName(category.name);
+        setSizeId(category.Id);
         setPopupVisible(true);
     }
 
@@ -36,10 +32,10 @@ const Color = () => {
     }
 
     const handleSubmit = async () => {
-        if (colourId) {
-            await updateColour({ Id: colourId, name, hex_code: hexCode });
+        if (sizeId) {
+            await updateSize({ Id: sizeId, name });
         } else {
-            await createColour({ name, hex_code: hexCode });
+            await createSize({ name });
         }
         setPopupVisible(false);
     }
@@ -52,8 +48,8 @@ const Color = () => {
                 <section className="content-main">
                     <div className="content-header">
                         <div>
-                            <h2 className="content-title card-title">Color List</h2>
-                            <p>Color List.</p>
+                            <h2 className="content-title card-title">Size List</h2>
+                            <p>Size List.</p>
                         </div>
                         <div>
                             <Button onClick={handleButtonClick} className="btn btn-primary btn-sm rounded mx-1">Create new</Button>
@@ -64,9 +60,6 @@ const Color = () => {
                             <Row className=" align-items-center py-2">
                                 <Col className="col-md-2 col-12 me-auto mb-md-0 mb-3">
                                     Name
-                                </Col>
-                                <Col className="col-md-2 col-12 me-auto mb-md-0 mb-3">
-                                    Hex code
                                 </Col>
                                 <Col className="col-md-2 col-6">
                                     Created
@@ -80,31 +73,26 @@ const Color = () => {
                             </Row>
                         </header>
                         <div className="card-body">
-                            {colours?.map((color, index) => (
+                            {sizes?.map((size, index) => (
                                 <article className="itemlist">
                                     <Row key={index} className="align-items-center">
                                         <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
                                             <div className="info">
-                                                <h6 className="mb-0">{color.name}</h6>
-                                            </div>
-                                        </Col>
-                                        <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
-                                            <div className="info">
-                                                <h6 className="mb-0">{color.hex_code}</h6>
+                                                <h6 className="mb-0">{size.name}</h6>
                                             </div>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-date">
-                                            <span>{new Date(color.createdAt).toLocaleDateString()}</span>
+                                            <span>{new Date(size.createdAt).toLocaleDateString()}</span>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-date">
-                                            <span>{new Date(color.updatedAt).toLocaleDateString()}</span>
+                                            <span>{new Date(size.updatedAt).toLocaleDateString()}</span>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-action text-end">
                                             <Button
                                                 variant='brand'
                                                 size="sm"
                                                 className='font-sm rounded mx-1'
-                                                onClick={() => handleEdit(color)}
+                                                onClick={() => handleEdit(size)}
                                             >
                                                 <i className="material-icons md-edit"></i> Edit
                                             </Button>
@@ -112,7 +100,7 @@ const Color = () => {
                                                 variant="light"
                                                 size="sm"
                                                 className="font-sm rounded mx-1"
-                                                onClick={(event) => handleDelete(event, color.Id)}
+                                                onClick={(event) => handleDelete(event, size.Id)}
                                             >
                                                 <i className="material-icons md-delete_forever"></i> Delete
                                             </Button>
@@ -139,7 +127,7 @@ const Color = () => {
                 <Footer />
                 <Modal show={isPopupVisible} onHide={handleButtonClick}>
                     <Modal.Header>
-                        <Modal.Title>{colourId ? 'Edit Colour' : 'Add Colour'}</Modal.Title>
+                        <Modal.Title>{sizeId ? 'Edit Category' : 'Add Category'}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
@@ -152,17 +140,6 @@ const Color = () => {
                                     placeholder='Enter Name'
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    autoFocus
-                                >
-                                </Form.Control>
-                                <Form.Label>
-                                    Hex code
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder='Enter Hex code'
-                                    value={hexCode}
-                                    onChange={(e) => setHexCode(e.target.value)}
                                     autoFocus
                                 >
                                 </Form.Control>
@@ -183,4 +160,4 @@ const Color = () => {
     )
 }
 
-export default Color
+export default Size;

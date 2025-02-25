@@ -18,7 +18,7 @@ module.exports = {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                category_id: {
+                categoryId: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },
@@ -31,7 +31,7 @@ module.exports = {
         SubCategories.references = async (models, sequelize) => {
             try {
                 const queryInterface = sequelize.getQueryInterface();
-                await queryInterface.changeColumn(TABLENAME, "category_id", {
+                await queryInterface.changeColumn(TABLENAME, "categoryId", {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                     references: {
@@ -50,7 +50,7 @@ module.exports = {
 
         SubCategories.associate = (models) => {
             SubCategories.belongsTo(models.Categories, {
-                foreignKey: "category_id",
+                foreignKey: "categoryId",
                 as: "Categories",
             });
         };
@@ -63,10 +63,10 @@ module.exports = {
         let type;
         for (let i = 0; i < subCategoryData.length; i++) {
             type = subCategoryData[i]
-            const { name, category_id } = type
+            const { name, categoryId } = type
 
             await SubCategories.findOrCreate({
-                where: { category_id, name }
+                where: { categoryId, name }
             })
         }
 

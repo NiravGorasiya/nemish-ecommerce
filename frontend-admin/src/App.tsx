@@ -14,6 +14,8 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import NotFound from './layouts/commonComponent/NotFound';
 import Color from './page/Color';
+import SubCategory from './page/SubCategory';
+import Size from './page/Size';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +26,8 @@ const App: React.FC = () => {
             <Route path="/page-product-list" element={<ProductList />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/color" element={<Color />} />
+            <Route path="/size" element={<Size />} />
+            <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/category" element={<Category />} />
             <Route path="/productadd" element={<Product />} />
             <Route path="/product" element={<ProductList />} />

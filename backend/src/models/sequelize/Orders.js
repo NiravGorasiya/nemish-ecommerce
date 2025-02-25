@@ -1,0 +1,75 @@
+const { DataTypes } = require("sequelize");
+const logger = require("../../config/logger");
+
+const TABLENAME = "Orders";
+
+try {
+    module.exports = {
+        defineModel: async (sequelize) => {
+            const Orders = await sequelize.define(
+                TABLENAME,
+                {
+                    Id: {
+                        type: DataTypes.INTEGER,
+                        primaryKey: true,
+                        autoIncrement: true,
+                    },
+                    userId: {
+                        type: DataTypes.INTEGER,
+                        allowNull: false
+                    },
+                    orderDate: {
+                        type: DataTypes.DATEONLY,
+                        allowNull: false
+                    },
+                    status:{
+                        type:DataTypes.ENUM('pending','processing','shipped','delivered','cancelled'),
+                        allowNull:false,
+                        defaultValue:'pending'
+                    },
+                    totalAmount:{
+                        type:DataTypes.DECIMAL(10,2)
+                    }
+                },
+                {
+                    hooks: {
+                        beforeCount(options) {
+                            options.raw = true;
+                        }
+                    }
+                },
+                {
+                    tableName: TABLENAME
+                }
+            )
+            Orders.references = async (models, sequelize) => {
+                try {
+                    const queryInterface = sequelize.getQueryInterface();
+                    await queryInterface.changeColumn(TABLENAME, "userId", {
+                        type: DataTypes.INTEGER,
+                        allowNull: false,
+                        references: {
+                            model: "Users",
+                            key: "Id",
+                        },
+                        onUpdate: "CASCADE",
+                        onDelete: "CASCADE",
+                    });
+                } catch (error) {
+                    logger.error("Error updating references: ", error);
+                    throw error;
+                }
+            };
+
+            Orders.associate =  (models) => {
+                Orders.belongsTo(models.Users, {
+                    foreignKey: "userId",
+                    as: "Users",
+                });
+            };
+            return Orders;
+        }
+    }
+} catch (error) {
+    logger.error(e)
+}

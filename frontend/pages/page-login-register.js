@@ -1,8 +1,32 @@
 import Link from "next/link";
 import Layout from "../components/layout/Layout";
+import { useState } from "react";
+import { useLoginUserMutation } from "../redux/reducer/authSlice";
 
 
 function Login() {
+    const [loginUser, { isError, error, isLoading, data }] = useLoginUserMutation();
+    const [userData, setUserData] = useState({
+        email: '',
+        password: ''
+    })
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserData({ ...userData, [name]: value })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await loginUser(userData)
+            console.log(response.data.token,'response');
+            localStorage.setItem("token", response.data.token);
+        } catch (error) {
+            console.error("Login failed:", err.message);
+        }
+    }
+
     return (
         <>
             <Layout parent="Home" sub="Pages" subChild="Login & Register">
@@ -19,11 +43,12 @@ function Login() {
                                                         Login
                                                     </h3>
                                                 </div>
-                                                <form method="post">
+                                                <form method="post" onSubmit={handleSubmit}>
                                                     <div className="form-group">
                                                         <input
                                                             type="text"
                                                             required=""
+                                                            onChange={handleInputChange}
                                                             name="email"
                                                             placeholder="Your Email"
                                                         />
@@ -33,6 +58,7 @@ function Login() {
                                                             required=""
                                                             type="password"
                                                             name="password"
+                                                            onChange={handleInputChange}
                                                             placeholder="Password"
                                                         />
                                                     </div>
@@ -152,10 +178,10 @@ function Login() {
                                                             </div>
                                                         </div>
                                                         <Link href="/page-privacy-policy">
-                                                        <a>
-                                                            <i className="fi-rs-book-alt mr-5 text-muted"></i>
-                                                            Lean more
-                                                        </a>
+                                                            <a>
+                                                                <i className="fi-rs-book-alt mr-5 text-muted"></i>
+                                                                Lean more
+                                                            </a>
                                                         </Link>
                                                     </div>
                                                     <div className="form-group">

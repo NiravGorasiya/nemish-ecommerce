@@ -1,13 +1,18 @@
-import { applyMiddleware, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import thunk from "redux-thunk";
-import rootReducer from "./reducer/rootReducer";
+import { configureStore } from '@reduxjs/toolkit'
+import { wishlistSlice } from './reducer/wishlistSlice';
+import { authSlice } from './reducer/authSlice';
 
-const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(thunk))
-);
+
+const store = configureStore({
+  reducer: {
+    [wishlistSlice.reducerPath]: wishlistSlice.reducer,
+    [authSlice.reducerPath]: authSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(wishlistSlice.middleware)
+      .concat(authSlice.middleware),
+});
+
 
 export default store;
-
-

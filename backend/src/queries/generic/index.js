@@ -36,10 +36,13 @@ const findOrCreateModelItemQ = async(modelName,queryData)=>{
     return modelItem
 }
 
-const updateModelItemQ = async(modelName, valueData,queryData )=>{
-    const updatedModelItem = await sequelize.models[modelName].update({...valueData},{...queryData})
-    return updatedModelItem
-}
+const updateModelItemQ = async (modelName, valueData, queryData) => {
+    const updatedModelItem = await sequelize.models[modelName].update(
+        { ...valueData }, 
+        { where: { ...queryData } } 
+    );
+    return updatedModelItem;
+};
 
 module.exports = {
     findModelItemQ,

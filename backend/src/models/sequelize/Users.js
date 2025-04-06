@@ -31,15 +31,17 @@ try {
               isEmail: true
             }
           },
+          loginJwt: {
+            type: DataTypes.TEXT,
+            allowNull: true
+          },
           userPassword: {
             type: DataTypes.TEXT,
-            set(value) {
-              const hashed = encryptPassword(value)
-              this.setDataValue('userPassword', hashed);
-            },
-            get() {
-              return this.getDataValue('userPassword');
-            }
+            allowNull: false
+          },
+          resetToken: {
+            type: DataTypes.TEXT,
+            allowNull: true
           }
         },
         {

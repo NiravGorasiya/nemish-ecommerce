@@ -12,11 +12,14 @@ app.use(morgan("tiny"));
 app.use(cors())
 
 const adminRoute = require("./router/Admin/index");
+const userRoute = require("./router/User/index")
 require("./models/sequelize");
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api", adminRoute);
+app.use("/api", userRoute);
+
 
 app.use(handleErrors);
 

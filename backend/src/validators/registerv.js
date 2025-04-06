@@ -5,7 +5,6 @@ const sequelize = require("../models/sequelize/index");
 
 module.exports = {
   registerv: [
-    body("username").exists().isString("username should be a valid string"),
     body("email")
       .exists()
       .trim()
@@ -14,7 +13,7 @@ module.exports = {
       .custom(async (email) => {
         const checkExistance = await sequelize.models.Users.findOne({
           where: {
-            email,
+            userEmail:email,
           },
         });
         if (checkExistance) {

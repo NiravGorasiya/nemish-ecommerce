@@ -1,13 +1,24 @@
-const bcrypt=require("bcrypt")
+const bcrypt = require("bcrypt");
 
-const encryptPassword =(plainTextPassword)=>{
-    const encrypted = bcrypt.hashSync(plainTextPassword,10)
-    return encrypted;
-}
+const encryptPassword = async (plainTextPassword) => {
+    try {
+        if (typeof plainTextPassword !== "string") {
+            throw new Error("Invalid password format: must be a string");
+        }
+        return await bcrypt.hash(plainTextPassword, 10);
+    } catch (error) {
+        console.error("Error encrypting password:", error);
+        throw error;
+    }
+};
 
-const comparePasswords= async(plainTextPass,passHash)=>{
-    const result =await bcrypt.compare(plainTextPass,passHash)
-    return result
-}
+const comparePasswords = async (plainTextPass, passHash) => {
+    try {
+        return await bcrypt.compare(plainTextPass, passHash);
+    } catch (error) {
+        console.error("Error comparing passwords:", error);
+        throw error;
+    }
+};
 
-module.exports={comparePasswords,encryptPassword}
+module.exports = { comparePasswords, encryptPassword };

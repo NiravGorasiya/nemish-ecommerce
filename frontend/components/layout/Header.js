@@ -1554,10 +1554,12 @@ const Header = ({
     );
 };
 
-const mapStateToProps = (state) => ({
-    totalCartItems: state.cart.length,
-    totalCompareItems: state.compare.items.length,
-    totalWishlistItems: state.wishlist.items.length,
-});
+// const mapStateToProps = (state) => ({
+//     totalCartItems: state.cart.length,
+//     totalCompareItems: state.compare.items.length,
+//     totalWishlistItems: state.wishlist.items.length,
+// });
 
-export default connect(mapStateToProps, null)(Header);
+// export default connect(mapStateToProps, null)(Header);
+
+export default Header;

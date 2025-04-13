@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 const logger = require("../../config/logger");
 
-const TABLENAME = "Orders";
+const TABLENAME = "ShippingAddresses";
 
 try {
     module.exports = {
         defineModel: async (sequelize) => {
-            const Orders = await sequelize.define(
+            const ShippingAddresses = await sequelize.define(
                 TABLENAME,
                 {
                     Id: {
@@ -16,31 +16,23 @@ try {
                     },
                     userId: {
                         type: DataTypes.INTEGER,
-                        allowNull: false
-                    },
-                    orderDate: {
-                        type: DataTypes.DATEONLY,
-                        allowNull: false
-                    },
-                    tracking_number: {
-                        type: DataTypes.STRING,
-                        allowNull: true
-                    },
-                    ShippingMethodId: {
-                        type: DataTypes.INTEGER,
-                        allowNull: true
-                    },
-                    ShippingAddressId: {
-                        type: DataTypes.INTEGER,
-                        allowNull: true
-                    },
-                    status: {
-                        type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
                         allowNull: false,
-                        defaultValue: 'pending'
                     },
-                    totalAmount: {
-                        type: DataTypes.DECIMAL(10, 2)
+                    address: {
+                        type: DataTypes.STRING,
+                        allowNull: false,
+                    },
+                    city: {
+                        type: DataTypes.STRING,
+                        allowNull: false
+                    },
+                    postalCode: {
+                        type: DataTypes.STRING,
+                        allowNull: false
+                    },
+                    country: {
+                        type: DataTypes.STRING,
+                        allowNull: false
                     }
                 },
                 {
@@ -53,8 +45,9 @@ try {
                 {
                     tableName: TABLENAME
                 }
-            )
-            Orders.references = async (models, sequelize) => {
+            );
+
+            ShippingAddresses.references = async (models, sequelize) => {
                 try {
                     const queryInterface = sequelize.getQueryInterface();
                     await queryInterface.changeColumn(TABLENAME, "userId", {
@@ -73,15 +66,16 @@ try {
                 }
             };
 
-            Orders.associate = (models) => {
-                Orders.belongsTo(models.Users, {
+            ShippingAddresses.associate = (models) => {
+                ShippingAddresses.belongsTo(models.Users, {
                     foreignKey: "userId",
                     as: "Users",
                 });
             };
-            return Orders;
+
+            return ShippingAddresses;
         }
     }
 } catch (error) {
-    logger.error(e)
+    logger.error(error); 
 }

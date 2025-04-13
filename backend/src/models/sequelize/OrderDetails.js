@@ -21,6 +21,14 @@ try {
                     productId: {
                         type: DataTypes.INTEGER,
                         allowNull: false
+                    },
+                    quantity: {
+                        type: DataTypes.INTEGER,
+                        allowNull: false
+                    },
+                    price: {
+                        type: DataTypes.INTEGER,
+                        allowNull: true
                     }
                 },
                 {

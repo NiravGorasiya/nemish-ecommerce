@@ -4,13 +4,27 @@ For a complete E-commerce website, you will need multiple APIs to handle differe
 User Registration API (POST /api/auth/register)
 User Login API (POST /api/auth/login)
 User Logout API (POST /api/auth/logout)
-
 User Profile API (GET /api/user/profile)
 Update Profile API (PUT /api/user/update)
 Change Password API (POST /api/user/change-password)
 Forgot Password API (POST /api/auth/forgot-password)
 Reset Password API (POST /api/auth/reset-password)
-Verify Email API (POST /api/auth/verify-email)
+4. Cart Management
+Add to Cart API (POST /api/cart/add)
+Get Cart Items API (GET /api/cart)
+Update Cart Item API (PUT /api/cart/update/:id)
+Remove Cart Item API (DELETE /api/cart/remove/:id)
+Clear Cart API (DELETE /api/cart/clear)
+3. Categories & Subcategories
+Get All Categories API (GET /api/categories)
+Get Single Category API (GET /api/categories/:id)
+Add New Category API (POST /api/categories)
+Update Category API (PUT /api/categories/:id)
+Delete Category API (DELETE /api/categories/:id)
+5. Wishlist
+Add to Wishlist API (POST /api/wishlist/add)
+Get Wishlist API (GET /api/wishlist)
+Remove from Wishlist API (DELETE /api/wishlist/:id)
 2. Product Management
 Get All Products API (GET /api/products)
 Get Single Product API (GET /api/products/:id)
@@ -19,22 +33,7 @@ Update Product API (PUT /api/products/:id)
 Delete Product API (DELETE /api/products/:id)
 Search Product API (GET /api/products/search?q=keyword)
 Filter Products API (GET /api/products/filter?category=shoes&price=100-500)
-3. Categories & Subcategories
-Get All Categories API (GET /api/categories)
-Get Single Category API (GET /api/categories/:id)
-Add New Category API (POST /api/categories)
-Update Category API (PUT /api/categories/:id)
-Delete Category API (DELETE /api/categories/:id)
-4. Cart Management
-Add to Cart API (POST /api/cart/add)
-Get Cart Items API (GET /api/cart)
-Update Cart Item API (PUT /api/cart/update/:id)
-Remove Cart Item API (DELETE /api/cart/remove/:id)
-Clear Cart API (DELETE /api/cart/clear)
-5. Wishlist
-Add to Wishlist API (POST /api/wishlist/add)
-Get Wishlist API (GET /api/wishlist)
-Remove from Wishlist API (DELETE /api/wishlist/:id)
+
 6. Orders & Checkout
 Place Order API (POST /api/orders)
 Get User Orders API (GET /api/orders)
@@ -82,20 +81,6 @@ Get All FAQs API (GET /api/faqs)
 Upload Image API (POST /api/upload/image)
 Get Site Settings API (GET /api/settings)
 Summary
-You will need 65+ APIs for a complete E-commerce website covering: ✅ User Authentication
-✅ Product Management
-✅ Categories & Subcategories
-✅ Cart & Wishlist
-✅ Order Processing
-✅ Payments & Shipping
-✅ Reviews & Ratings
-✅ Admin Dashboard
-✅ Notifications
-✅ Analytics & Reports
-✅ Coupons & Discounts
-✅ Customer Support
-
-Would you like code examples for these APIs? Let me know! 🚀
 
 
 

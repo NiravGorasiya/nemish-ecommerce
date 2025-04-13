@@ -16,7 +16,7 @@ try {
                     },
                     categoryId: {
                         type: DataTypes.INTEGER,
-                        allowNull: false
+                        allowNull: true
                     },
                     subcategoryId: {
                         type: DataTypes.INTEGER,
@@ -36,7 +36,7 @@ try {
                     },
                     isActive: {
                         type: DataTypes.BOOLEAN,
-                        allowNull: false
+                        allowNull: true
                     },
                     stockQuantity: {
                         type: DataTypes.INTEGER,

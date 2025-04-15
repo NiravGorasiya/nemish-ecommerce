@@ -7,6 +7,8 @@ import { addToCompare } from "../../redux/action/compareAction";
 import { openQuickView } from "../../redux/action/quickViewAction";
 import { addToWishlist } from "../../redux/action/wishlistAction";
 import Loader from './../elements/Loader';
+import { useAddCartItemMutation } from "../../redux/reducer/cartSlice";
+import { useCreateWishlistItemMutation } from "../../redux/reducer/wishlistSlice";
 
 
 const SingleProduct = ({
@@ -16,7 +18,12 @@ const SingleProduct = ({
     addToWishlist,
     openQuickView,
 }) => {
+
     const [loading, setLoading] = useState(false);
+    const [addCartItem, { isLoading, isSuccess, error }] = useAddCartItemMutation()
+    const [createWishlistItem] = useCreateWishlistItemMutation();
+
+    console.log(product?.colours?.[0]?.images?.[0]?.imageUrl);
 
     useEffect(() => {
         setLoading(true);
@@ -26,7 +33,11 @@ const SingleProduct = ({
     }, []);
 
     const handleCart = (product) => {
-        addToCart(product);
+        const productData = {
+            productId: product.Id,
+            quantity: 1
+        }
+        addCartItem(productData);
         toast.success("Add to Cart !");
     };
 
@@ -36,108 +47,112 @@ const SingleProduct = ({
     };
 
     const handleWishlist = (product) => {
-        addToWishlist(product);
+        const wishlistData = {
+            productId: product.Id,
+            quantity: 1
+        }
+        createWishlistItem(wishlistData);
         toast.success("Add to Wishlist !");
     };
     return (
         <>
 
-{!loading ?  (
-<>
-            <div className="product-cart-wrap mb-30">
-                <div className="product-img-action-wrap">
-                    <div className="product-img product-img-zoom">
-                        <Link
-                            href="/products/[slug]"
-                            as={`/products/${product.slug}`}
-                        >
-                            <a>
-                                <img
-                                    className="default-img"
-                                    src={product.images[0].img}
-                                    alt=""
-                                />
-                                <img
-                                    className="hover-img"
-                                    src={product.images[1].img}
-                                    alt=""
-                                />
-                            </a>
-                        </Link>
-                    </div>
-                    <div className="product-action-1">
-                        <a
-                            aria-label="Quick view"
-                            className="action-btn hover-up"
-                            data-bs-toggle="modal"
-                            onClick={(e) => openQuickView(product)}
-                        >
-                            <i className="fi-rs-eye"></i>
-                        </a>
-                        <a
-                            aria-label="Add To Wishlist"
-                            className="action-btn hover-up"
-                            onClick={(e) => handleWishlist(product)}
-                        >
-                            <i className="fi-rs-heart"></i>
-                        </a>
-                        <a
-                            aria-label="Compare"
-                            className="action-btn hover-up"
-                            onClick={(e) => handleCompare(product)}
-                        >
-                            <i className="fi-rs-shuffle"></i>
-                        </a>
-                    </div>
+            {!loading ? (
+                <>
+                    <div className="product-cart-wrap mb-30">
+                        <div className="product-img-action-wrap">
+                            <div className="product-img product-img-zoom">
+                                <Link
+                                    href="/products/[slug]"
+                                    as={`/products/${product.slug}`}
+                                >
+                                    <a>
+                                        <img
+                                            className="default-img"
+                                            src={`http://localhost:3001/uploads/${product?.colours?.[0]?.images?.[0]?.imageUrl}`}
+                                            alt=""
+                                        />
+                                        <img
+                                            className="hover-img"
+                                            src={`http://localhost:3001/uploads/${product?.colours?.[0]?.images?.[0]?.imageUrl}`}
+                                            alt=""
+                                        />
+                                    </a>
+                                </Link>
+                            </div>
+                            <div className="product-action-1">
+                                <a
+                                    aria-label="Quick view"
+                                    className="action-btn hover-up"
+                                    data-bs-toggle="modal"
+                                    onClick={(e) => openQuickView(product)}
+                                >
+                                    <i className="fi-rs-eye"></i>
+                                </a>
+                                <a
+                                    aria-label="Add To Wishlist"
+                                    className="action-btn hover-up"
+                                    onClick={(e) => handleWishlist(product)}
+                                >
+                                    <i className="fi-rs-heart"></i>
+                                </a>
+                                <a
+                                    aria-label="Compare"
+                                    className="action-btn hover-up"
+                                    onClick={(e) => handleCompare(product)}
+                                >
+                                    <i className="fi-rs-shuffle"></i>
+                                </a>
+                            </div>
 
-                    <div className="product-badges product-badges-position product-badges-mrg">
-                        {product.trending ? <span className="hot">Hot</span>:null }
+                            <div className="product-badges product-badges-position product-badges-mrg">
+                                {/* {product.trending ? <span className="hot">Hot</span>:null }
                         {product.created ? <span className="new">New</span>:null }
                         {product.totalSell > 100 ? <span className="best">Best Sell</span>:null }
                         {product.discount.isActive ? <span className="sale">Sale</span>:null }
-                        {product.discount.percentage >= 5 ? <span className="hot">{product.discount.percentage}%</span>:null }
+                        {product.discount.percentage >= 5 ? <span className="hot">{product.discount.percentage}%</span>:null } */}
+                            </div>
+                        </div>
+                        <div className="product-content-wrap">
+                            <div className="product-category">
+                                <Link href="/products">
+                                    <a>
+                                        {product.brand}
+                                    </a>
+                                </Link>
+                            </div>
+                            <h2>
+                                <Link
+                                    href="/products/[slug]"
+                                    as={`/products/${product.slug}`}
+                                >
+                                    <a>{product.name}</a>
+                                </Link>
+                            </h2>
+                            <div className="rating-result" title="90%">
+                                <span>
+                                    <span>{product.ratingScore}%</span>
+                                </span>
+                            </div>
+                            <div className="product-price">
+                                <span>${product.price} </span>
+                                <span className="old-price">{product.oldPrice ? `$ ${product.oldPrice}` : null}</span>
+                            </div>
+                            <div className="product-action-1 show">
+                                <a
+                                    aria-label="Add To Cart"
+                                    className="action-btn hover-up"
+                                    onClick={(e) => handleCart(product)}
+                                >
+                                    <i className="fi-rs-shopping-bag-add"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="product-content-wrap">
-                    <div className="product-category">
-                    <Link href="/products">
-                                                            <a>
-                                                                {product.brand}
-                                                            </a>
-                                                        </Link>
-                    </div>
-                    <h2>
-                    <Link
-                            href="/products/[slug]"
-                            as={`/products/${product.slug}`}
-                        >
-                            <a>{product.title}</a>
-                            </Link>
-                    </h2>
-                    <div className="rating-result" title="90%">
-                        <span>
-                            <span>{product.ratingScore}%</span>
-                        </span>
-                    </div>
-                    <div className="product-price">
-                        <span>${product.price} </span>
-                        <span className="old-price">{product.oldPrice ? `$ ${product.oldPrice}`:null}</span>
-                    </div>
-                    <div className="product-action-1 show">
-                        <a
-                            aria-label="Add To Cart"
-                            className="action-btn hover-up"
-                            onClick={(e) => handleCart(product)}
-                        >
-                            <i className="fi-rs-shopping-bag-add"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            </>
-            ):(
-                <Loader/>
+                </>
+            ) : (
+                <Loader />
             )}
         </>
     );

@@ -1,7 +1,8 @@
+const sequelize = require("../../models/sequelize")
 const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../queries/generic")
 const { convertQuery } = require("../../utils/paginationUtils")
 
-const createCartCtrl = async (ctrlData) => {    
+const createCartCtrl = async (ctrlData) => {
     const branch = await createModelItemQ('Carts', ctrlData)
     return branch
 }
@@ -9,16 +10,42 @@ const createCartCtrl = async (ctrlData) => {
 const getCartCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit)
 
-    const carts = await findModelItemsQ('Carts', {
-        offset,
-        limit,
-        order: [
-            ['createdAt', 'DESC']
-        ],
-        raw: true
-    })
+    const carts = await findModelItemsQ(
+        'Carts',
+        {},
+        {
+            offset,
+            limit,
+            order: [['createdAt', 'DESC']],
+            include: [
+                {
+                    model: sequelize.models.Products,
+                    as: 'Products',
+                    attributes: ['Id', 'name', 'finalPrice', 'stockQuantity'],
+                    include: [{
+                        model: sequelize.models.ProductColours,
+                        as: "colours",
+                        attributes: ['colorId'],
+                        include: [
+                            {
+                                model: sequelize.models.Colours,
+                                as: 'colour',
+                                attributes: ['name', "Id"]
+                            },
+                            {
+                                model: sequelize.models.ProductColorImages,
+                                as: 'images'
+                            }
+                        ]
+                    }]
+                }
+            ],
+            raw: false
+        },
+        true
+    );
 
-    return carts;
+    return carts
 }
 
 // Delete a Colour
@@ -47,13 +74,13 @@ const deleteCartCtrl = async (ctrlData) => {
     }
 }
 
-const getoneCartCtrl = async(ctrlData)=>{
-    const Category = await findModelItemQ('Carts',{
-        where:{
+const getoneCartCtrl = async (ctrlData) => {
+    const Category = await findModelItemQ('Carts', {
+        where: {
             id: ctrlData.categoryId
         }
     })
-    if(!Category){
+    if (!Category) {
         throw new DataNotFoundError('Category not exit')
     }
     return Category

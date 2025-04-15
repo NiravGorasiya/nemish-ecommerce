@@ -5,11 +5,13 @@ const wishlistRouter = require("./wishlistRouter");
 const cartRouter = require("./cartRouter");
 const orderRouter = require("./orderRouter");
 const ShippingRouterRouter = require("./shippingAddressRouter");
+const ProductRouter = require("./productRouter");
 
 module.exports = Router()
   .use("/user", userRouter)
   .use("/cart", cartRouter)
   .use("/wishlist", wishlistRouter)
   .use("/order", orderRouter)
+  .use("/userproduct", ProductRouter)
   .use("/shippingaddress", ShippingRouterRouter)
 

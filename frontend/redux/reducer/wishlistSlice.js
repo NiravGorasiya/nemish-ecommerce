@@ -1,15 +1,38 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-
 export const wishlistSlice = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api/user' }),
-    tagTypes: ['wishlist'],
-    endpoints: (builder) => ({
-        getWishlist: builder.query({
-            query: () => "/all"
-        })
+  reducerPath: 'wishlist',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3001/api/wishlist',
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      }
+      return headers;
+    }
+  }),
+  tagTypes: ['wishlist'],
+  endpoints: (builder) => ({
+    getWishlist: builder.query({
+      query: () => '/all',
+    }),
+    deleteWishlistItem: builder.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['wishlist']
+    }),
+    createWishlistItem: builder.mutation({
+      query: (wishlistItm) => ({
+        url: '/add',
+        method: 'POST',
+        body: wishlistItm
+      }),
+      invalidatesTags: ['wishlist']
     })
-})
+  }),
+});
 
-export const { useGetWishlistQuery } = wishlistSlice;
+export const { useGetWishlistQuery, useDeleteWishlistItemMutation,useCreateWishlistItemMutation } = wishlistSlice;

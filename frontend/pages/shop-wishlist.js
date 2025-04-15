@@ -7,6 +7,8 @@ import {
     closeWishlistModal,
     deleteFromWishlist
 } from "../redux/action/wishlistAction";
+import { useDeleteWishlistItemMutation, useGetWishlistQuery } from "../redux/reducer/wishlistSlice";
+import { useAddCartItemMutation } from "../redux/reducer/cartSlice";
 
 const Wishlist = ({
     wishlist,
@@ -15,9 +17,18 @@ const Wishlist = ({
     deleteFromWishlist,
     addToCart,
 }) => {
+    const { data } = useGetWishlistQuery();
+    const [deleteWishlistItem] = useDeleteWishlistItemMutation()
+    const [addCartItem] = useAddCartItemMutation()
+    
+    const wishlists = data?.info?.rows
 
-    const handleCart = (product) => {
-        addToCart(product);
+    const handleCart = (product) => {        
+        const productData = {
+            productId: product.productId,
+            quantity: 1
+        }
+        addCartItem(productData);
         toast.success("Add to Cart !");
     };
     return (
@@ -27,7 +38,7 @@ const Wishlist = ({
                     <div className="container">
                         <div className="row">
                             <div className="col-12">
-                                {wishlist.items.length > 0 ? (
+                                {wishlists?.length > 0 ? (
                                     <div className="table-responsive">
                                         <table className="table shopping-summery text-center">
                                             <thead>
@@ -44,31 +55,25 @@ const Wishlist = ({
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {wishlist.items.map(
+                                                {wishlists?.map(
                                                     (product) => (
                                                         <tr>
                                                             <td className="image product-thumbnail">
-                                                                <img
-                                                                    src={
-                                                                        product
-                                                                            .images[0]
-                                                                            .img
-                                                                    }
-                                                                    alt=""
+                                                                <img alt=""
                                                                     className="img-fluid"
                                                                     width="70"
-                                                                />
+                                                                    src={`http://localhost:3001/uploads/${product?.Products?.colours?.[0]?.images?.[0]?.imageUrl}`} />
                                                             </td>
 
                                                             <td className="product-des product-name">
                                                                 <h5 className="product-name">
                                                                     <a>
                                                                         {
-                                                                            product.title
+                                                                            product?.Products?.name
                                                                         }
                                                                     </a>
                                                                 </h5>
-                                                                <p className="font-xs">
+                                                                {/* <p className="font-xs">
                                                                     Maboriosam
                                                                     in a tonto
                                                                     nesciung
@@ -76,16 +81,16 @@ const Wishlist = ({
                                                                     <br />
                                                                     distingy
                                                                     magndapibus.
-                                                                </p>
+                                                                </p> */}
                                                             </td>
                                                             <td
                                                                 className="price"
                                                                 data-title="Price"
                                                             >
                                                                 <span>
-                                                                    $
+                                                                    {/* $ */}
                                                                     {
-                                                                        product.price
+                                                                        product?.Products?.finalPrice
                                                                     }
                                                                 </span>
                                                             </td>
@@ -93,8 +98,8 @@ const Wishlist = ({
                                                                 className="text-center"
                                                                 data-title="Stock"
                                                             >
-                                                                {product.stock ===
-                                                                0 ? (
+                                                                {product?.Products?.finalPrice ===
+                                                                    0 ? (
                                                                     <span className="text-danger font-weight-bold">
                                                                         Out of
                                                                         stock
@@ -109,8 +114,8 @@ const Wishlist = ({
                                                                 className="text-right"
                                                                 data-title="Cart"
                                                             >
-                                                                {product.stock ===
-                                                                0 ? (
+                                                                {product?.Products?.finalPrice ===
+                                                                    0 ? (
                                                                     <button className="btn btn-sm btn-secondary">
                                                                         <i className="fi-rs-headset mr-5"></i>
                                                                         Contact
@@ -141,8 +146,8 @@ const Wishlist = ({
                                                                     onClick={(
                                                                         e
                                                                     ) =>
-                                                                        deleteFromWishlist(
-                                                                            product.id
+                                                                        deleteWishlistItem(
+                                                                            product.Id
                                                                         )
                                                                     }
                                                                 >

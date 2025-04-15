@@ -3,15 +3,21 @@ import Layout from "../components/layout/Layout";
 
 import Link from "next/link";
 import { clearCart, closeCart, decreaseQuantity, deleteFromCart, increaseQuantity, openCart } from "../redux/action/cart";
+import { useDeleteCartItemMutation, useGetCartQuery } from "../redux/reducer/cartSlice";
 
 const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, decreaseQuantity, deleteFromCart, clearCart }) => {
-    const price = () => {
-        let price = 0;
-        cartItems.forEach((item) => (price += item.price * item.quantity));
+    // const price = () => {
+    //     let price = 0;
+    //     cartItems.forEach((item) => (price += item.price * item.quantity));
 
-        return price;
-    };
+    //     return price;
+    // };
+    const { data, error, loading } = useGetCartQuery()
+    const [deleteCartItem] = useDeleteCartItemMutation()
 
+    const cartItem = data?.info?.rows
+
+    
     return (
         <>
             <Layout parent="Home" sub="Shop" subChild="Cart">
@@ -20,8 +26,8 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                         <div className="row">
                             <div className="col-12">
                                 <div className="table-responsive">
-                                    {cartItems.length <= 0 && "No Products"}
-                                    <table className={cartItems.length > 0 ? "table shopping-summery text-center clean" : "d-none"}>
+                                    {cartItem && cartItem.length <= 0 && "No Products"}
+                                    <table className={cartItem && cartItem.length > 0 ? "table shopping-summery text-center clean" : "d-none"}>
                                         <thead>
                                             <tr className="main-heading">
                                                 <th scope="col">Image</th>
@@ -33,16 +39,16 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {cartItems.map((item, i) => (
+                                            {cartItem && cartItem.map((item, i) => (
                                                 <tr key={i}>
                                                     <td className="image product-thumbnail">
-                                                        <img src={item.images[0].img} />
+                                                         <img src={`http://localhost:3001/uploads/${item?.Products?.colours?.[0]?.images?.[0]?.imageUrl}`} />
                                                     </td>
 
                                                     <td className="product-des product-name">
                                                         <h5 className="product-name">
                                                             <Link href="/products">
-                                                                <a>{item.title}</a>
+                                                                <a>{item?.Products?.name}</a>
                                                             </Link>
                                                         </h5>
                                                         <p className="font-xs">
@@ -51,7 +57,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                         </p>
                                                     </td>
                                                     <td className="price" data-title="Price">
-                                                        <span>${item.price}</span>
+                                                        <span>${item?.Products?.finalPrice}</span>
                                                     </td>
                                                     <td className="text-center" data-title="Stock">
                                                         <div className="detail-qty border radius  m-auto">
@@ -68,7 +74,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                         <span>${item.quantity * item.price}</span>
                                                     </td>
                                                     <td className="action" data-title="Remove">
-                                                        <a onClick={(e) => deleteFromCart(item.id)} className="text-muted">
+                                                        <a onClick={(e) => deleteCartItem(item.Id)} className="text-muted">
                                                             <i className="fi-rs-trash"></i>
                                                         </a>
                                                     </td>
@@ -76,7 +82,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                             ))}
                                             <tr>
                                                 <td colSpan="6" className="text-end">
-                                                    {cartItems.length > 0 && (
+                                                    {cartItem && cartItem.length > 0 && (
                                                         <a onClick={clearCart} className="text-muted">
                                                             <i className="fi-rs-cross-small"></i>
                                                             Clear Cart
@@ -412,7 +418,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                         <tr>
                                                             <td className="cart_total_label">Cart Subtotal</td>
                                                             <td className="cart_total_amount">
-                                                                <span className="font-lg fw-900 text-brand">$ {price()}</span>
+                                                                {/* <span className="font-lg fw-900 text-brand">$ {price()}</span> */}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -426,7 +432,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                             <td className="cart_total_label">Total</td>
                                                             <td className="cart_total_amount">
                                                                 <strong>
-                                                                    <span className="font-xl fw-900 text-brand">${price()}</span>
+                                                                    {/* <span className="font-xl fw-900 text-brand">${price()}</span> */}
                                                                 </strong>
                                                             </td>
                                                         </tr>
@@ -450,7 +456,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
 };
 
 const mapStateToProps = (state) => ({
-    cartItems: state.cart,
+    cartItem: state.cart,
     activeCart: state.counter
 });
 

@@ -4,13 +4,20 @@ import FeaturedTab from './../elements/FeaturedTab';
 import NewArrivalTab from './../elements/NewArrivalTab';
 import TrendingTab from './../elements/TrendingTab';
 import Link from "next/link"
+import { useGetProductsQuery } from "../../redux/reducer/productSlice";
 
 function FeatchTab() {
     const [active, setActive] = useState("1");
     const [featured, setFeatured] = useState([]);
     const [trending, setTrending] = useState([]);
     const [newArrival, setNewArrival] = useState([]);
+    const {data} = useGetProductsQuery()
+    console.log(data,'datadata');
 
+    const products = data?.info?.rows
+    console.log(products,'products');
+    
+    
     const featuredProduct = async () => {
         const request = await fetch(`${server}/static/product.json`);
         const allProducts = await request.json();
@@ -72,11 +79,11 @@ function FeatchTab() {
             <div className="tab-content wow fadeIn animated">
                 <div className={active === "1" ? "tab-pane fade show active" : "tab-pane fade"}>
                     <div className="product-grid-4 row">
-                        <FeaturedTab products={featured} />
+                        <FeaturedTab products={products} />
                     </div>
                 </div>
 
-                <div className={active === "2" ? "tab-pane fade show active" : "tab-pane fade"}>
+                {/* <div className={active === "2" ? "tab-pane fade show active" : "tab-pane fade"}>
                     <div className="product-grid-4 row">
                         <TrendingTab products={trending} />
                     </div>
@@ -85,7 +92,7 @@ function FeatchTab() {
                     <div className="product-grid-4 row">
                         <NewArrivalTab products={newArrival} />
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

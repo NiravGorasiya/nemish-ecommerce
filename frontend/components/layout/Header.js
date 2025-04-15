@@ -937,21 +937,6 @@ const Header = ({
                                                             <a>Home 1</a>
                                                         </Link>
                                                     </li>
-                                                    <li>
-                                                        <Link href="/index-2">
-                                                            <a>Home 2</a>
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/index-3">
-                                                            <a>Home 3</a>
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/index-4">
-                                                            <a>Home 4</a>
-                                                        </Link>
-                                                    </li>
                                                 </ul>
                                             </li>
                                             <li>

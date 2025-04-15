@@ -4,17 +4,19 @@ const findModelItemQ = (modelName,queryOpts)=>{
     return sequelize.models[modelName].findOne(options);
 }
 
-const findModelItemsQ = async (modelName, queryOpts, count = true, scope = null) => {
-    const options = { ...queryOpts, raw: queryOpts?.raw ?? false }; // Add raw option to queryOpts
-    if (count) {
-        const result = await sequelize.models[modelName].findAndCountAll(options);
-        return result; // Returns { count, rows }
-    } else {
-        const result = await sequelize.models[modelName].findAll(options);
-        return result; // Returns array of rows
-    }
-};
+const findModelItemsQ = async (modelName, where = {}, options = {}, count = true) => {
+    const finalOptions = {
+        where,
+        ...options,
+        raw: options?.raw ?? false
+    };
 
+    const model = sequelize.models[modelName];
+
+    return count
+        ? await model.findAndCountAll(finalOptions)
+        : await model.findAll(finalOptions);
+};
 
 const findModelItemsWithScopeQ = (modelName,queryOpts,count=true,scope=null)=>{
     let result = null

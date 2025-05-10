@@ -23,7 +23,7 @@ function Login() {
             console.log(response.data.token,'response');
             localStorage.setItem("token", response.data.token);
         } catch (error) {
-            console.error("Login failed:", err.message);
+            console.error("Login failed:", error.message);
         }
     }
 

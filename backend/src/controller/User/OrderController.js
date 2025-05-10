@@ -1,5 +1,8 @@
+const Razorpay = require("razorpay")
 const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../queries/generic")
 const { convertQuery } = require("../../utils/paginationUtils")
+const crypto = require("crypto");
+const secret = process.env.RAZORPAY_KEY_SECRET
 
 const createOrderCtrl = async (ctrlData) => {
     let orderData = {
@@ -40,7 +43,56 @@ const getUserOrderCtrl = async (queryData) => {
     return carts;
 }
 
+const razorpay = require('../../utils/razorpay'); // Make sure this path is correct
+
+const createUserOrderCtrl = async (ctrlData) => {
+    try {
+        console.log("Controller data:", ctrlData);
+
+        const { amount } = ctrlData;
+
+        if (!amount || isNaN(amount)) {
+            throw new Error("Invalid amount received");
+        }
+
+        const options = {
+            amount: Math.round(amount * 100), // convert to paisa and round
+            currency: "INR",
+            receipt: `receipt_${Math.floor(Math.random() * 1000)}`,
+        };
+
+        console.log("Creating Razorpay order with options:", options);
+        const order = await razorpay.orders.create(options);
+        console.log("Order created:", order);
+        return order;
+    } catch (error) {
+        console.error("Failed to create Razorpay order:", JSON.stringify(error, null, 2));
+    }
+};
+
+
+const createPaymentSuccessCtrl = async (ctrlData) => {
+    try {
+        const { signature, orderId, paymentId } = ctrlData;
+
+        const expectedSignature = crypto
+            .createHmac("sha256", process.env.RAZORPAY_SECRET)
+            .update(`${orderId}|${paymentId}`)
+            .digest("hex");
+
+        if (expectedSignature === signature) {
+            return "Payment verified successfully.";
+        } else {
+            return "Payment verification failed.";
+        }
+    } catch (error) {
+        console.error("Signature verification error:", error);
+    }
+};
+
 module.exports = {
     createOrderCtrl,
     getUserOrderCtrl,
+    createUserOrderCtrl,
+    createPaymentSuccessCtrl
 }

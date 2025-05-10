@@ -16,15 +16,18 @@ const getUserProductCtrl = async (queryData) => {
                     model: sequelize.models.ProductColours,
                     as: "colours",
                     attributes: ['colorId'],
+                    required:false,
                     include: [
                         {
                             model: sequelize.models.Colours,
                             as: 'colour',
-                            attributes: ['name', "Id"]
+                            attributes: ['name', "Id"],
+                            required:false,
                         },
                         {
                             model: sequelize.models.ProductColorImages,
-                            as: 'images'
+                            as: 'images',
+                            required:false,
                         }
                     ]
                 }

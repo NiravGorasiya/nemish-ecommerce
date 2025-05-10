@@ -11,13 +11,12 @@ import { useDeleteWishlistItemMutation, useGetWishlistQuery } from "../redux/red
 import { useAddCartItemMutation } from "../redux/reducer/cartSlice";
 
 const Wishlist = ({
-    wishlist,
-    clearWishlist,
-    closeWishlistModal,
-    deleteFromWishlist,
-    addToCart,
+    clearWishlist
 }) => {
-    const { data } = useGetWishlistQuery();
+    const { data,refetch } = useGetWishlistQuery(undefined,{
+        refetchOnMountOrArgChange:true,
+    });
+    
     const [deleteWishlistItem] = useDeleteWishlistItemMutation()
     const [addCartItem] = useAddCartItemMutation()
     
@@ -145,11 +144,12 @@ const Wishlist = ({
                                                                 <a
                                                                     onClick={(
                                                                         e
-                                                                    ) =>
+                                                                    ) =>{
                                                                         deleteWishlistItem(
                                                                             product.Id
                                                                         )
-                                                                    }
+                                                                        refetch()
+                                                                    }}
                                                                 >
                                                                     <i className="fi-rs-trash"></i>
                                                                 </a>

@@ -1,15 +1,101 @@
+"use client";
+
 import { connect } from "react-redux";
 import Layout from "../components/layout/Layout";
 
 import { clearCart, closeCart, decreaseQuantity, deleteFromCart, increaseQuantity, openCart } from "../redux/action/cart";
+import { useGetCartQuery } from "../redux/reducer/cartSlice";
+import { useAddPlaceOrderMutation, useCreateOrderMutation, usePaymentSuccessMutation } from "../redux/reducer/orderSlice";
 
-const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, decreaseQuantity, deleteFromCart, clearCart }) => {
-    const price = () => {
-        let price = 0;
-        cartItems.forEach((item) => (price += item.price * item.quantity));
+const Cart = () => {
+    const { data, error, loading, refetch } = useGetCartQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    })
+    const cartItem = data?.info?.rows
 
-        return price;
+    const [addPlaceOrder] = useAddPlaceOrderMutation()
+    const [createOrder] = useCreateOrderMutation();
+    const [paymentSuccess] = usePaymentSuccessMutation();
+
+    const subTotal = cartItem?.reduce((acc, item) => {
+        return acc + item.quantity * item?.Products?.finalPrice
+    }, 0) || 0;
+
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
     };
+    
+    const handlePlaceOrder = async (e) => {
+        e.preventDefault();
+    
+        const res = await loadRazorpayScript();
+        if (!res) {
+            alert("Failed to load Razorpay SDK");
+            return;
+        }
+    
+        const carDeatils = cartItem.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.Products.finalPrice
+        }));
+    
+        const orderItem = {
+            items: carDeatils,
+            ShippingAddressId: 1,
+            ShippingMethodId: 1,
+            totalAmount: subTotal
+        };
+    
+        await addPlaceOrder(orderItem);
+    
+        const orderResponse = await createOrder({ amount: subTotal }).unwrap();
+    
+        console.log(orderResponse,'orderResponse');
+        
+        const options = {
+            key: 'rzp_test_cZQfBdqqN9hQhH',
+            amount: subTotal * 100,
+            currency: orderResponse.info.currency,
+            name: 'your company name',
+            description: 'payment for order',
+            order_id: orderResponse.info?.id,
+            handler: async function (response) {
+                console.log("last response",response);
+                
+                try {
+                    await paymentSuccess({
+                        paymentId: response.razorpay_payment_id,
+                        orderId: response.razorpay_order_id,
+                        signature: response.razorpay_signature,
+                    }).unwrap();
+                    alert("Payment Verified Successfullyabc!");
+                } catch (error) {
+                    console.log(error,'errror');
+                    
+                    alert("Payment verification failed okddd!");
+                }
+            },
+            prefill: {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                contact: "9999999999",
+            },
+            theme: {
+                color: "#F37254",
+            },
+        };
+    
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+    };
+    
 
     return (
         <>
@@ -619,8 +705,8 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                         <h4>Your Orders</h4>
                                     </div>
                                     <div className="table-responsive order_table text-center">
-                                        {cartItems.length <= 0 && "No Products"}
-                                        <table className={cartItems.length > 0 ? "table" : "d-none"}>
+                                        {cartItem && cartItem.length <= 0 && "No Products"}
+                                        <table className={cartItem && cartItem.length > 0 ? "table" : "d-none"}>
                                             <thead>
                                                 <tr>
                                                     <th colSpan="2">Product</th>
@@ -628,24 +714,24 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {cartItems.map((item, i) => (
-                                                        <tr key={i}>
-                                                            <td className="image product-thumbnail">
-                                                                <img src={item.images[0].img} alt="#" />
-                                                            </td>
-                                                            <td>
-                                                                <h5>
-                                                                    <a>{item.title}</a>
-                                                                </h5>{" "}
-                                                                <span className="product-qty">x {item.quantity}</span>
-                                                            </td>
-                                                            <td>${item.quantity * item.price}</td>
-                                                        </tr>
+                                                {cartItem && cartItem.map((item, i) => (
+                                                    <tr key={i}>
+                                                        <td className="image product-thumbnail">
+                                                            <img src={`http://localhost:3001/uploads/${item?.Products?.colours?.[0]?.images?.[0]?.imageUrl}`} />
+                                                        </td>
+                                                        <td>
+                                                            <h5>
+                                                                <a>{item?.Products?.name}</a>
+                                                            </h5>{" "}
+                                                            <span className="product-qty">x {item.quantity}</span>
+                                                        </td>
+                                                        <td>${item.quantity * item?.Products?.finalPrice}</td>
+                                                    </tr>
                                                 ))}
                                                 <tr>
                                                     <th>SubTotal</th>
                                                     <td className="product-subtotal" colSpan="2">
-                                                        ${price()}
+                                                        ${subTotal}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -657,7 +743,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                                 <tr>
                                                     <th>Total</th>
                                                     <td colSpan="2" className="product-subtotal">
-                                                        <span className="font-xl text-brand fw-900">${price()}</span>
+                                                        <span className="font-xl text-brand fw-900">${subTotal}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -699,7 +785,7 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="#" className="btn btn-fill-out btn-block mt-30">
+                                    <a href="#" className="btn btn-fill-out btn-block mt-30" onClick={handlePlaceOrder}>
                                         Place Order
                                     </a>
                                 </div>
@@ -712,18 +798,4 @@ const Cart = ({ openCart, cartItems, activeCart, closeCart, increaseQuantity, de
     );
 };
 
-const mapStateToProps = (state) => ({
-    cartItems: state.cart,
-    activeCart: state.counter
-});
-
-const mapDispatchToProps = {
-    closeCart,
-    increaseQuantity,
-    decreaseQuantity,
-    deleteFromCart,
-    openCart,
-    clearCart
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default Cart;

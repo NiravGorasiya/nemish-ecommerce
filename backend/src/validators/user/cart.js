@@ -3,7 +3,8 @@ const { body, query } = require("express-validator");
 module.exports = {
     cartv: [
         body('productId')
-            .exists().withMessage('The product not be empty !'),
+        .optional()
+        .notEmpty().withMessage('Product ID cannot be empty'),
         body("quantity")
             .exists().withMessage('Quantity is required!')
             .isInt({ min: 1 }).withMessage('Quantity must be a positive integer')

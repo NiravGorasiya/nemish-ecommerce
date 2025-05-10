@@ -3,8 +3,13 @@ const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../que
 const { convertQuery } = require("../../utils/paginationUtils")
 
 const createCartCtrl = async (ctrlData) => {
-    const branch = await createModelItemQ('Carts', ctrlData)
-    return branch
+    console.log(ctrlData, 'ctrlData');
+    const findProduct = await findModelItemQ('Carts', { where: { userId: ctrlData?.userId, productId: ctrlData.productId }, raw: true })
+    let cart
+    if (!findProduct) {
+        branch = await createModelItemQ('Carts', ctrlData)
+    }
+    return cart
 }
 
 const getCartCtrl = async (queryData) => {
@@ -22,19 +27,23 @@ const getCartCtrl = async (queryData) => {
                     model: sequelize.models.Products,
                     as: 'Products',
                     attributes: ['Id', 'name', 'finalPrice', 'stockQuantity'],
+                    required: false,
                     include: [{
                         model: sequelize.models.ProductColours,
                         as: "colours",
                         attributes: ['colorId'],
+                        required: false,
                         include: [
                             {
                                 model: sequelize.models.Colours,
                                 as: 'colour',
-                                attributes: ['name', "Id"]
+                                attributes: ['name', "Id"],
+                                required: false,
                             },
                             {
                                 model: sequelize.models.ProductColorImages,
-                                as: 'images'
+                                as: 'images',
+                                required: false
                             }
                         ]
                     }]

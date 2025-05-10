@@ -35,7 +35,7 @@ try {
                         allowNull: true
                     },
                     status: {
-                        type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
+                        type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled','returned','refunded'),
                         allowNull: false,
                         defaultValue: 'pending'
                     },

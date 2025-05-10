@@ -1,0 +1,4 @@
+key 
+backend razorpay
+key_id= rzp_test_7NyqdqcWTFmRpk
+key_secret = 9kU1lheZ5oKN2ES5cdG9sWCG

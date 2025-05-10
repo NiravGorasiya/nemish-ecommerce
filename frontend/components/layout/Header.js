@@ -2,9 +2,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Search from "../ecommerce/Search";
+import { useGetCartQuery } from "../../redux/reducer/cartSlice";
+import { useGetWishlistQuery } from "../../redux/reducer/wishlistSlice";
 
 const Header = ({
-    totalCartItems,
     totalCompareItems,
     toggleClick,
     totalWishlistItems,
@@ -12,7 +13,27 @@ const Header = ({
 }) => {
     const [isToggled, setToggled] = useState(false);
     const [scroll, setScroll] = useState(0);
+    const { data: cart } = useGetCartQuery();
+    const { data: wishlist } = useGetWishlistQuery()
 
+    let totalCartItem = 0;
+
+    if (cart && cart.info && cart.info.rows) {
+        let cartItem = cart.info.rows;
+        cartItem.map((item) => {
+            console.log();
+            totalCartItem += item.quantity
+        })
+    }
+
+    let totalWishlistItem = 0;
+
+    if(wishlist && wishlist.info && wishlist.info.rows){
+        let wishlists = wishlist.info.rows;
+        totalWishlistItem = wishlists.length;
+    }
+
+    
     useEffect(() => {
         document.addEventListener("scroll", () => {
             const scrollCheck = window.scrollY >= 100;
@@ -166,7 +187,7 @@ const Header = ({
                                                         src="/assets/imgs/theme/icons/icon-heart.svg"
                                                     />
                                                     <span className="pro-count blue">
-                                                        {totalWishlistItems}
+                                                        {totalWishlistItem}
                                                     </span>
                                                 </a>
                                             </Link>
@@ -179,13 +200,13 @@ const Header = ({
                                                         src="/assets/imgs/theme/icons/icon-cart.svg"
                                                     />
                                                     <span className="pro-count blue">
-                                                        {totalCartItems}
+                                                        {totalCartItem}
                                                     </span>
                                                 </a>
                                             </Link>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -1427,7 +1448,7 @@ const Header = ({
                                                     src="/assets/imgs/theme/icons/icon-cart.svg"
                                                 />
                                                 <span className="pro-count white">
-                                                    {totalCartItems}
+                                                    {totalCartItem}
                                                 </span>
                                             </a>
                                         </Link>
@@ -1538,13 +1559,5 @@ const Header = ({
         </>
     );
 };
-
-// const mapStateToProps = (state) => ({
-//     totalCartItems: state.cart.length,
-//     totalCompareItems: state.compare.items.length,
-//     totalWishlistItems: state.wishlist.items.length,
-// });
-
-// export default connect(mapStateToProps, null)(Header);
 
 export default Header;

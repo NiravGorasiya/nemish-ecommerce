@@ -30,8 +30,16 @@ export const cartSlice = createApi({
                 method: "POST",
                 body: carItem,
             })
+        }),
+        updateCartItem: builder.mutation({
+            query: ({ Id, ...body }) => ({
+                url: `/update/${Id}`,
+                method: 'PUT',
+                body,
+            }),
+            invalidatesTags: (result, error, { Id }) => [{ type: "cart", Id }],
         })
     })
 })
 
-export const { useGetCartQuery, useDeleteCartItemMutation,useAddCartItemMutation } = cartSlice
+export const { useGetCartQuery, useDeleteCartItemMutation, useAddCartItemMutation, useUpdateCartItemMutation } = cartSlice

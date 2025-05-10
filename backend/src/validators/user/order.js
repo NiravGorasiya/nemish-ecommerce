@@ -23,10 +23,24 @@ module.exports = {
 
         body('items.*.price')
             .optional()
-            .isFloat({ min: 0 }).withMessage('Price must be a positive number')
+            .isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+        body('totalAmount')
+            .exists().withMessage('Total amount is required!')
     ],
     getOrderV: [
         query('limit').optional().isInt({ min: 1, max: 100 }).withMessage("Limit must be a number between 1 to 100").toInt(),
         query('page').optional().isInt({ min: 1, max: 100 }).withMessage("Page must be a number between 1 to 100").toInt(),
+    ],
+    createOrder: [
+        body('amount')
+        .exists().withMessage('Amount is required!')
+    ],
+    paymentSuccess: [
+        body('paymentId')
+        .exists().withMessage('Payment id is required!'),
+        body('orderId')
+        .exists().withMessage('OrderId id is required!'),
+        body('signature')
+        .exists().withMessage('signature id is required!')
     ]
 };

@@ -3,6 +3,7 @@ import { wishlistSlice } from './reducer/wishlistSlice';
 import { authSlice } from './reducer/authSlice';
 import { cartSlice } from './reducer/cartSlice';
 import { productSlice } from './reducer/productSlice';
+import { orderSlice } from './reducer/orderSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     [wishlistSlice.reducerPath]: wishlistSlice.reducer,
     [cartSlice.reducerPath]: cartSlice.reducer,
     [productSlice.reducerPath]: productSlice.reducer,
+    [orderSlice.reducerPath]:orderSlice.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -17,6 +19,7 @@ const store = configureStore({
       .concat(authSlice.middleware)
       .concat(cartSlice.middleware)
       .concat(productSlice.middleware)
+      .concat(orderSlice.middleware)
 });
 
 

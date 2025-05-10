@@ -14,19 +14,18 @@ app.use(cors())
 const adminRoute = require("./router/Admin/index");
 const userRoute = require("./router/User/index")
 require("./models/sequelize");
+require("./utils/razorpay")
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api", adminRoute);
 app.use("/api", userRoute);
 
-
 app.use(handleErrors);
 
 app.get("/", (req, res) => {
   res.send(`server start`);
 });
-
 
 app.all("*", (req, res) => {
   res.status(404).send("Page not found");

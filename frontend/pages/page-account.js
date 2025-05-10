@@ -1,9 +1,14 @@
 import Layout from "../components/layout/Layout";
 import React, { useState } from "react";
 import Link from "next/link"
+import { useGetUserOrderQuery } from "../redux/reducer/orderSlice";
 
 function Account() {
     const [activeIndex, setActiveIndex] = useState(1);
+    const { data } = useGetUserOrderQuery()
+    console.log(data, 'data');
+
+    const orderData = data?.info?.rows;
 
     const handleOnClick = (index) => {
         setActiveIndex(index); // remove the curly braces
@@ -25,7 +30,7 @@ function Account() {
                                                 <li className="nav-item" onClick={() => handleOnClick(1)}>
                                                     <a
                                                         className={activeIndex === 1 ? "nav-link active" : "nav-link"}
-                                                        
+
                                                     >
                                                         <i className="fi-rs-settings-sliders mr-10"></i>
                                                         Dashboard
@@ -34,7 +39,7 @@ function Account() {
                                                 <li className="nav-item" onClick={() => handleOnClick(2)}>
                                                     <a
                                                         className={activeIndex === 2 ? "nav-link active" : "nav-link"}
-                                                        
+
                                                     >
                                                         <i className="fi-rs-shopping-bag mr-10"></i>
                                                         Orders
@@ -43,7 +48,7 @@ function Account() {
                                                 <li className="nav-item" onClick={() => handleOnClick(3)}>
                                                     <a
                                                         className={activeIndex === 3 ? "nav-link active" : "nav-link"}
-                                                        
+
                                                     >
                                                         <i className="fi-rs-shopping-cart-check mr-10"></i>
                                                         Track Your Order
@@ -52,7 +57,7 @@ function Account() {
                                                 <li className="nav-item" onClick={() => handleOnClick(4)}>
                                                     <a
                                                         className={activeIndex === 4 ? "nav-link active" : "nav-link"}
-                                                        
+
                                                     >
                                                         <i className="fi-rs-marker mr-10"></i>
                                                         My Address
@@ -61,7 +66,7 @@ function Account() {
                                                 <li className="nav-item" onClick={() => handleOnClick(5)}>
                                                     <a
                                                         className={activeIndex === 5 ? "nav-link active" : "nav-link"}
-                                                        
+
                                                     >
                                                         <i className="fi-rs-user mr-10"></i>
                                                         Account details
@@ -69,13 +74,13 @@ function Account() {
                                                 </li>
                                                 <li className="nav-item">
                                                     <Link href="/page-login-register">
-                                                    <a
-                                                        className="nav-link"
-                                                        
-                                                    >
-                                                        <i className="fi-rs-sign-out mr-10"></i>
-                                                        Logout
-                                                    </a>
+                                                        <a
+                                                            className="nav-link"
+
+                                                        >
+                                                            <i className="fi-rs-sign-out mr-10"></i>
+                                                            Logout
+                                                        </a>
                                                     </Link>
                                                 </li>
                                             </ul>
@@ -155,87 +160,30 @@ function Account() {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            #1357
-                                                                        </td>
-                                                                        <td>
-                                                                            March
-                                                                            45,
-                                                                            2020
-                                                                        </td>
-                                                                        <td>
-                                                                            Processing
-                                                                        </td>
-                                                                        <td>
-                                                                            $125.00
-                                                                            for
-                                                                            2
-                                                                            item
-                                                                        </td>
-                                                                        <td>
-                                                                            <a
-                                                                                href="#"
-                                                                                className="btn-small d-block"
-                                                                            >
-                                                                                View
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            #2468
-                                                                        </td>
-                                                                        <td>
-                                                                            June
-                                                                            29,
-                                                                            2020
-                                                                        </td>
-                                                                        <td>
-                                                                            Completed
-                                                                        </td>
-                                                                        <td>
-                                                                            $364.00
-                                                                            for
-                                                                            5
-                                                                            item
-                                                                        </td>
-                                                                        <td>
-                                                                            <a
-                                                                                href="#"
-                                                                                className="btn-small d-block"
-                                                                            >
-                                                                                View
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            #2366
-                                                                        </td>
-                                                                        <td>
-                                                                            August
-                                                                            02,
-                                                                            2020
-                                                                        </td>
-                                                                        <td>
-                                                                            Completed
-                                                                        </td>
-                                                                        <td>
-                                                                            $280.00
-                                                                            for
-                                                                            3
-                                                                            item
-                                                                        </td>
-                                                                        <td>
-                                                                            <a
-                                                                                href="#"
-                                                                                className="btn-small d-block"
-                                                                            >
-                                                                                View
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
+                                                                    {orderData && orderData.map((item) => (
+                                                                        <tr>
+                                                                            <td>
+                                                                                {item.Id}
+                                                                            </td>
+                                                                            <td>
+                                                                                {item.orderDate}
+                                                                            </td>
+                                                                            <td>
+                                                                                {item.status}
+                                                                            </td>
+                                                                            <td>
+                                                                                {item.totalAmount}
+                                                                            </td>
+                                                                            <td>
+                                                                                <a
+                                                                                    href="#"
+                                                                                    className="btn-small d-block"
+                                                                                >
+                                                                                    View
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -394,9 +342,9 @@ function Account() {
                                                             Already have an
                                                             account?
                                                             <Link href="/page-login-register">
-                                                            <a>
-                                                                Log in instead!
-                                                            </a>
+                                                                <a>
+                                                                    Log in instead!
+                                                                </a>
                                                             </Link>
                                                         </p>
                                                         <form

@@ -57,7 +57,7 @@ const createProductCtrl = async (ctrlData, files) => {
 const getAllProdctCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit)
 
-    const product = await findModelItemsQ('Products', {
+    const product = await findModelItemsQ('Products',{}, {
         offset,
         limit,
         order: [

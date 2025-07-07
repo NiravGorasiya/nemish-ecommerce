@@ -12,7 +12,7 @@ const createSizeCtrl = async (ctrlData) => {
 const getSizesCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit);
 
-    const sizes = await findModelItemsQ('Sizes', {
+    const sizes = await findModelItemsQ('Sizes',{}, {
         offset,
         limit,
         order: [

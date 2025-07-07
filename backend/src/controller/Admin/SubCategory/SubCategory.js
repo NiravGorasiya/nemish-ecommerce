@@ -11,7 +11,7 @@ const createSubCategoryCtrl = async (ctrlData) => {
 const getSubCategoryCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit)
 
-    const subCategory = await findModelItemsQ('SubCategories', {
+    const subCategory = await findModelItemsQ('SubCategories',{}, {
         offset,
         limit,
         order: [

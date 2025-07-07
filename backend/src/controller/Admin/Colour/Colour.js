@@ -12,7 +12,7 @@ const createColourCtrl = async (ctrlData) => {
 const getColoursCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit);
 
-    const colours = await findModelItemsQ('Colours', {
+    const colours = await findModelItemsQ('Colours',{}, {
         offset,
         limit,
         order: [

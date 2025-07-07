@@ -5,7 +5,7 @@ module.exports = {
         body('name')
             .exists().withMessage('Name is required')
             .isString().withMessage('Name should be a valid string'),
-        body('category_id')
+        body('categoryId')
             .exists().withMessage('The category not be empty !')
             .isInt().withMessage('The categoryId is required to be an Integer')
     ],

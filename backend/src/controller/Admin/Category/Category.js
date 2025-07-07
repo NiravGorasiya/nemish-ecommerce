@@ -10,7 +10,7 @@ const createCategoryCtrl = async (ctrlData) => {
 const getCategoryCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit)
 
-    const category = await findModelItemsQ('Categories', {
+    const category = await findModelItemsQ('Categories', {}, {
         offset,
         limit,
         order: [
@@ -47,13 +47,13 @@ const deleteCategoryCtrl = async (ctrlData) => {
     }
 }
 
-const getoneCategoryCtrl = async(ctrlData)=>{
-    const Category = await findModelItemQ('Categories',{
-        where:{
+const getoneCategoryCtrl = async (ctrlData) => {
+    const Category = await findModelItemQ('Categories', {
+        where: {
             id: ctrlData.categoryId
         }
     })
-    if(!Category){
+    if (!Category) {
         throw new DataNotFoundError('Category not exit')
     }
     return Category

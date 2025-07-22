@@ -9,14 +9,11 @@ SwiperCore.use([Navigation]);
 const NewArrival = () => {
     const [newArrival, setNewArrival] = useState([]);
 
-    // console.log(newArrival);
-
     useEffect(() => {
         fetchProducts();
     }, []);
 
     const fetchProducts = async () => {
-        // With Category
         const request = await fetch(`${server}/static/product.json`);
         const allProducts = await request.json();
 

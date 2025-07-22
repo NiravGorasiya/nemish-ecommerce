@@ -12,11 +12,8 @@ function FeatchTab() {
     const [trending, setTrending] = useState([]);
     const [newArrival, setNewArrival] = useState([]);
     const {data} = useGetProductsQuery()
-    console.log(data,'datadata');
 
-    const products = data?.info?.rows
-    console.log(products,'products');
-    
+    const products = data?.info?.rows    
     
     const featuredProduct = async () => {
         const request = await fetch(`${server}/static/product.json`);

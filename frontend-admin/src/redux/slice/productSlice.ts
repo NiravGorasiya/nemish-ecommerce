@@ -31,7 +31,7 @@ export const productSlice = createApi({
             query: (id) => `/${id}`,
             providesTags: ['product']
         }),
-        createProduct: builder.mutation<any, FormData>({  
+        createProduct: builder.mutation<any, FormData>({
             query: (body) => ({
                 url: '/add',
                 method: 'POST',
@@ -52,4 +52,4 @@ export const productSlice = createApi({
 export const { useGetProductQuery,
     useCreateProductMutation,
     useGetProductDetailQuery,
-useDeleteProductMutation } = productSlice;
+    useDeleteProductMutation } = productSlice;

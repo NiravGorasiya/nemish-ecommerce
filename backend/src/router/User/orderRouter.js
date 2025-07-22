@@ -34,8 +34,6 @@ router.post("/create-order", userAuth, createOrder,expressValidatorMw, async (re
         const query = matchedData(req, { locations: ['body'] })
         query.userId = req.user.Id
         const createOrder = await createUserOrderCtrl(query)
-        console.log(createOrder,'dsaf');
-        
         return successResponce(req, res, createOrder)
     } catch (error) {
         return next(error);

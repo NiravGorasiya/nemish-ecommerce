@@ -134,7 +134,6 @@ const db_sync = async() => {
         global.DB_PROCESSING = false
     } catch (e) {
         logger.info(e)
-        console.log(e)
     }
 
 })()

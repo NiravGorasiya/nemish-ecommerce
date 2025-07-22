@@ -10,8 +10,6 @@ const auth = require("../../middlewares/auth");
 router.post("/add", auth, wishlistv, expressValidatorMw, async (req, res, next) => {
     try {
         const ctrlData = matchedData(req, { locations: ["body"] });
-        console.log(req.user,'req.usef');
-        
         ctrlData.userId = req.user.Id
         const wishlist = await createWhishlistCtrl(ctrlData)
         return createResponse(req, res, wishlist);

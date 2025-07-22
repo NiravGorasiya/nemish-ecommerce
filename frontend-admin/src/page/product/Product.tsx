@@ -7,18 +7,26 @@ import * as Yup from 'yup';
 import { useGetSubCategoryQuery } from '../../redux/slice/subCategory';
 import { useCreateProductMutation } from '../../redux/slice/productSlice';
 import MultiSelected from '../../utils/MultiSelected';
+import ColorImageGroupUploader from '../../utils/ColorImageGroupUploader';
+import { useGetColourByIdQuery, useGetColourQuery } from '../../redux/slice/colorSlice';
 
 interface FormValues {
-    name: string,
-    title: string,
-    description: string,
-    price: number,
-    status: string,
-    SKU: string,
+    name: string;
+    title: string;
+    description: string;
+    price: number;
     finalPrice: number;
-    size_id: string[];
+    status: string;
+    SKU: string;
     subcategoryId: string;
-    colorImages: { colorId: string; images: File[] }[];
+    size_id: string[];
+    colorImages: {
+        colorId: string;
+        images: {
+            file: File;
+            preview: string;
+        }[];
+    }[];
 }
 
 const validationSchema = Yup.object({
@@ -56,17 +64,22 @@ const Product: React.FC = () => {
         status: '',
         SKU: '',
         size_id: [],
-        colorImages: [],
+        colorImages: []
     }
 
     const { data } = useGetSubCategoryQuery({});
+    const { data: colorData } = useGetColourQuery();
+
     const [createProduct] = useCreateProductMutation();
     const subcategoryData = data?.info;
+    const colorsDatas = colorData?.info?.rows;
+    console.log(colorsDatas, 'colorsDatas');
 
-    const availableColors = ["1", "2", "3", "4"]; // Example color IDs
-
-    console.log(initialValues, 'initialvlaues');
-    const onsubmit = async (values: FormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    const onsubmit = async (
+        values: FormValues,
+        { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+    ) => {
+        console.log('✌️values --->', values);
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("title", values.title);
@@ -76,26 +89,28 @@ const Product: React.FC = () => {
         formData.append("finalPrice", values.finalPrice.toString());
         formData.append("status", values.status);
         formData.append("SKU", values.SKU);
-        values.size_id.forEach((size) => formData.append("size_id[]", size));
 
-        values.colorImages.forEach(({ colorId, images }) => {
-            formData.append("color_id[]", colorId);
-
-            images.forEach((file) => {
-                formData.append("images", file);
-            });
+        values.size_id.forEach((sizeId) => {
+            formData.append("size_id[]", sizeId);
         });
 
+        values.colorImages.forEach(({ colorId, images }) => {
+            images.forEach((imgObj) => {
+                formData.append("color_id[]", colorId); // Repeated for each image
+                formData.append("images", imgObj.file); // Parallel to color_id[]
+            });
+        });
         try {
             const response = await createProduct(formData).unwrap();
             console.log("API response:", response);
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        } finally {
-            setSubmitting(false);
+        } catch (err: any) {
+            if (err.status) {
+                console.error("Server responded with error:", err.status, err.data);
+            } else {
+                console.error("Client/network error:", err.message);
+            }
         }
     };
-
 
 
     return (
@@ -192,66 +207,14 @@ const Product: React.FC = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="row">
-                                                    <div className="col-md-12 mb-4">
-                                                        <label className="form-label">Color & Image Upload</label>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-sm btn-primary"
-                                                            onClick={() => {
-                                                                setFieldValue("colorImages", [...values.colorImages, { colorId: "", images: [] }]);
-                                                            }}
-                                                        >
-                                                            + Add Color
-                                                        </button>
-                                                    </div>
-
-                                                    {values.colorImages.map((item, index) => (
-                                                        <div key={index} className="row mb-3">
-                                                            <div className="col-md-5">
-                                                                <select
-                                                                    className="form-select"
-                                                                    value={item.colorId}
-                                                                    onChange={(e) => {
-                                                                        const updatedColors = [...values.colorImages];
-                                                                        updatedColors[index].colorId = e.target.value;
-                                                                        setFieldValue("colorImages", updatedColors);
-                                                                    }}
-                                                                >
-                                                                    <option value="">Select Color</option>
-                                                                    {availableColors.map((color) => (
-                                                                        <option key={color} value={color}>Color {color}</option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                            <div className="col-md-5">
-                                                                <input
-                                                                    type="file"
-                                                                    multiple
-                                                                    accept="image/*"
-                                                                    className="form-control"
-                                                                    onChange={(e) => {
-                                                                        const files = Array.from(e.target.files || []);
-                                                                        const updatedColors = [...values.colorImages];
-                                                                        updatedColors[index].images = [...updatedColors[index].images, ...files];
-                                                                        setFieldValue("colorImages", updatedColors);
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <div className="col-md-2">
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-sm btn-danger"
-                                                                    onClick={() => {
-                                                                        setFieldValue("colorImages", values.colorImages.filter((_, i) => i !== index));
-                                                                    }}
-                                                                >
-                                                                    Remove
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <ColorImageGroupUploader
+                                                    colorImages={values.colorImages}
+                                                    setColorImages={(val) => setFieldValue("colorImages", val)}
+                                                    availableColors={colorsDatas?.map((color) => ({
+                                                        id: color.Id.toString(),
+                                                        name: color.name
+                                                    })) || []}
+                                                />
                                             </div>
 
                                         </Form>

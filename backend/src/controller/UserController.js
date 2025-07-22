@@ -9,7 +9,6 @@ const { findModelItemQ, updateModelItemQ } = require("../queries/generic");
 const nodemailer = require("nodemailer");
 
 const userSignupCtrl = async (ctrlData) => {
-  console.log(ctrlData, 'ctrlData');
   try {
     const existingUser = await findUserByEmail(ctrlData.email);
 

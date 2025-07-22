@@ -16,8 +16,6 @@ const SingleProductList = ({
     addToWishlist,
     openQuickView,
 }) => {
-    // console.log(product);
-
     const handleCart = (product) => {
         addToCart(product);
         toast.success("Add to Cart !");

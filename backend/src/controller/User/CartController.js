@@ -3,7 +3,6 @@ const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../que
 const { convertQuery } = require("../../utils/paginationUtils")
 
 const createCartCtrl = async (ctrlData) => {
-    console.log(ctrlData, 'ctrlData');
     const findProduct = await findModelItemQ('Carts', { where: { userId: ctrlData?.userId, productId: ctrlData.productId }, raw: true })
     let cart
     if (!findProduct) {

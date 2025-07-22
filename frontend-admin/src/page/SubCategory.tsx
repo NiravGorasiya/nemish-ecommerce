@@ -10,7 +10,7 @@ import { useGetCategoriesQuery, useUpdateCategoryMutation } from '../redux/slice
 
 interface FormValues {
     name: string;
-    category_id: string
+    categoryId: string
 }
 
 export interface category {
@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
     name: Yup.string()
         .required('Name is required')
         .min(2, 'Name must be at  least 3 character log'),
-    category_id: Yup.string()
+    categoryId: Yup.string()
         .required('Category  is required')
 })
 
@@ -53,7 +53,7 @@ const SubCategory: React.FC = () => {
 
     const initialValues: FormValues = {
         name:  subCategoryId ? name : '',
-        category_id: categoryId ? String(categoryId) : ''
+        categoryId: categoryId ? String(categoryId) : ''
     }
 
     const handleEdit = (subCategory: { Id: number, name: string, Categories: category }) => {
@@ -190,13 +190,13 @@ const SubCategory: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="form-label">Category</label>
-                                        <Field as="select" name="category_id" className="form-select">
+                                        <Field as="select" name="categoryId" className="form-select">
                                             <option value="">Select Category</option>
                                             {categorys?.map((category) => (
                                                 <option value={category.Id}> {category.name} </option>
                                             ))}
                                         </Field>
-                                        <ErrorMessage name='category_id' component="div" className='error'></ErrorMessage>
+                                        <ErrorMessage name='categoryId' component="div" className='error'></ErrorMessage>
                                     </div>
                                 </Modal.Body>
                                 <Modal.Footer>

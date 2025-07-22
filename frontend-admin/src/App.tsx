@@ -16,6 +16,7 @@ import NotFound from './layouts/commonComponent/NotFound';
 import Color from './page/Color';
 import SubCategory from './page/SubCategory';
 import Size from './page/Size';
+import Customer from './page/Customer';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/category" element={<Category />} />
             <Route path="/productadd" element={<Product />} />
+            <Route path="/customer" element={<Customer />} />
             <Route path="/product" element={<ProductList />} />
             <Route path="/product/detail/:id" element={<ProductDetails />} />
             <Route path="/order" element={<ProductDetails />} />

@@ -22,9 +22,6 @@ const getAllProdctDetailsCtrl = async (queryData) => {
             type: sequelize.QueryTypes.SELECT
         }
     );
-    
-    console.log('Raw query results:', results);
-    
 
     // return productDetails;
 }

@@ -6,8 +6,7 @@ import { useGetUserOrderQuery } from "../redux/reducer/orderSlice";
 function Account() {
     const [activeIndex, setActiveIndex] = useState(1);
     const { data } = useGetUserOrderQuery()
-    console.log(data, 'data');
-
+    
     const orderData = data?.info?.rows;
 
     const handleOnClick = (index) => {

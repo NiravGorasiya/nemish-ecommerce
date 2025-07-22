@@ -6,6 +6,7 @@ const cartRouter = require("./cartRouter");
 const orderRouter = require("./orderRouter");
 const ShippingRouterRouter = require("./shippingAddressRouter");
 const ProductRouter = require("./productRouter");
+const CustomerRouter = require("./customerRouter")
 
 module.exports = Router()
   .use("/user", userRouter)
@@ -14,4 +15,5 @@ module.exports = Router()
   .use("/order", orderRouter)
   .use("/userproduct", ProductRouter)
   .use("/shippingaddress", ShippingRouterRouter)
+  .use("/customer", CustomerRouter)
 

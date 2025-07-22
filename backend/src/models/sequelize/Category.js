@@ -25,9 +25,15 @@ try {
                     tableName: TABLENAME
                 }
             )
+            Categorys.associate = (models) => {
+                Categorys.hasMany(models.SubCategories, {
+                    foreignKey: "categoryId",
+                    as: "SubCategories",
+                });
+            };
             return Categorys;
         },
-        insertFixedData: async(sequelize) => { 
+        insertFixedData: async (sequelize) => {
             const { Categories } = sequelize.models
 
             let type;
@@ -36,7 +42,7 @@ try {
                 const { name } = type
 
                 await Categories.findOrCreate({
-                    where: { name}
+                    where: { name }
                 })
             }
 

@@ -56,8 +56,6 @@ const Cart = () => {
         await addPlaceOrder(orderItem);
     
         const orderResponse = await createOrder({ amount: subTotal }).unwrap();
-    
-        console.log(orderResponse,'orderResponse');
         
         const options = {
             key: 'rzp_test_cZQfBdqqN9hQhH',
@@ -67,8 +65,6 @@ const Cart = () => {
             description: 'payment for order',
             order_id: orderResponse.info?.id,
             handler: async function (response) {
-                console.log("last response",response);
-                
                 try {
                     await paymentSuccess({
                         paymentId: response.razorpay_payment_id,
@@ -77,8 +73,6 @@ const Cart = () => {
                     }).unwrap();
                     alert("Payment Verified Successfullyabc!");
                 } catch (error) {
-                    console.log(error,'errror');
-                    
                     alert("Payment verification failed okddd!");
                 }
             },

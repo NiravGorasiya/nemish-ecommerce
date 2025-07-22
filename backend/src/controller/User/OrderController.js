@@ -47,8 +47,6 @@ const razorpay = require('../../utils/razorpay'); // Make sure this path is corr
 
 const createUserOrderCtrl = async (ctrlData) => {
     try {
-        console.log("Controller data:", ctrlData);
-
         const { amount } = ctrlData;
 
         if (!amount || isNaN(amount)) {
@@ -61,9 +59,8 @@ const createUserOrderCtrl = async (ctrlData) => {
             receipt: `receipt_${Math.floor(Math.random() * 1000)}`,
         };
 
-        console.log("Creating Razorpay order with options:", options);
+
         const order = await razorpay.orders.create(options);
-        console.log("Order created:", order);
         return order;
     } catch (error) {
         console.error("Failed to create Razorpay order:", JSON.stringify(error, null, 2));

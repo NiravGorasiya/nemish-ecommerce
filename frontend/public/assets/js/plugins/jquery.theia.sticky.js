@@ -34,8 +34,6 @@
             var success = tryInit(options, $that);
 
             if (!success) {
-                console.log('TSS: Body width smaller than options.minWidth. Init is delayed.');
-
                 $(document).on('scroll.' + options.namespace, function (options, $that) {
                     return function (evt) {
                         var success = tryInit(options, $that);

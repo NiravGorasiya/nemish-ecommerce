@@ -2,8 +2,6 @@
 import SingleProduct from "../ecommerce/SingleProduct";
 
 const FeaturedTab = ({ products }) => {
-    console.log(products,'proddcu');
-    
     const showItem= 8
     return (
         <>

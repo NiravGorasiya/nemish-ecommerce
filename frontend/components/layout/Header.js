@@ -21,7 +21,6 @@ const Header = ({
     if (cart && cart.info && cart.info.rows) {
         let cartItem = cart.info.rows;
         cartItem.map((item) => {
-            console.log();
             totalCartItem += item.quantity
         })
     }

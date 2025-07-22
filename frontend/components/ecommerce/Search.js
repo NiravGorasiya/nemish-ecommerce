@@ -6,7 +6,6 @@ const Search = () => {
     const router = useRouter();
 
     const handleSearch = () => {
-        console.log("click");
         router.push({
             pathname: "/products",
             query: {

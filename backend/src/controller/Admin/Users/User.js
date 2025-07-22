@@ -7,7 +7,6 @@ const { UserNotFoundError} = require("../../../errors")
 const loginController = async ({ email, password }, next) => {
     try {
         let user = await findUserByEmail(email);
-        console.log(user,'user');
         
         if (user !== null) {
             const result = await comparePasswords(password, user.userPassword);

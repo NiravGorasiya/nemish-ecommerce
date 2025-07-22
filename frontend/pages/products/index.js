@@ -16,8 +16,6 @@ import { fetchProduct } from "../../redux/action/product";
 import Link from "next/link";
 
 const Products = ({ products, productFilters, fetchProduct }) => {
-    console.log(products);
-
     let Router = useRouter(),
         searchTerm = Router.query.search,
         showLimit = 12,

@@ -22,9 +22,6 @@ router.post("/signup", registerv, expressValidatorMw, async (req, res, next) => 
     await userSignupCtrl(ctrlData);
     createResponse(req, res, "User created Successfully");
   } catch (error) {
-    if (error) {
-      console.log(error, "err");
-    }
     return next(error);
   }
 });

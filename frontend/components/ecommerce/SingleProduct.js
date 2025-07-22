@@ -23,8 +23,6 @@ const SingleProduct = ({
     const [addCartItem, { isLoading, isSuccess, error }] = useAddCartItemMutation()
     const [createWishlistItem] = useCreateWishlistItemMutation();
 
-    console.log(product?.colours?.[0]?.images?.[0]?.imageUrl);
-
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {

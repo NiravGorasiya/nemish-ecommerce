@@ -4,12 +4,14 @@ import { subCategorySlice } from './slice/subCategory';
 import { productSlice } from './slice/productSlice';
 import { authApi } from './slice/autheSlice';
 import { colorSlice } from './slice/colorSlice';
+import { customerSlice } from './slice/customerSlice';
 import { sizeSlice } from './slice/sizeSlice';
 
 export const store = configureStore({
     reducer: {
         [categorySlice.reducerPath]: categorySlice.reducer,
         [colorSlice.reducerPath]: colorSlice.reducer,
+        [customerSlice.reducerPath]: customerSlice.reducer,
         [subCategorySlice.reducerPath]: subCategorySlice.reducer,
         [productSlice.reducerPath]:productSlice.reducer,
         [authApi.reducerPath]:authApi.reducer,
@@ -23,6 +25,7 @@ export const store = configureStore({
             .concat(authApi.middleware)
             .concat(sizeSlice.middleware)
             .concat(colorSlice.middleware)
+            .concat(customerSlice.middleware)
 
 })
 

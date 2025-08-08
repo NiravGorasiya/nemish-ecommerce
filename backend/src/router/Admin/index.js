@@ -7,6 +7,7 @@ const attributeRouter = require("./attributeRouter")
 const productRouter = require("./productRouter")
 const customerRouter = require("./customerRouter")
 const productDetails = require("./productDetailsRouter")
+const bannerRouter = require("./bannerRouter")
 
 const adminRouter = Router();
 
@@ -18,6 +19,7 @@ adminRouter.use("/product", productRouter);
 adminRouter.use("/subcategory", SubCategoriesRouter);
 adminRouter.use("/productDetails", productDetails);
 adminRouter.use("/customer", customerRouter);
+adminRouter.use("/banner", bannerRouter);
 
 module.exports = adminRouter;
 

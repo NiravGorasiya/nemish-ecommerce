@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { matchedData } = require("express-validator");
 
 const expressValidatorMw = require("../../middlewares/validate");
-const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse, deleteResponce } = require("../../utils/sendResponse");
 const { createWhishlistCtrl } = require("../../controller/User/WishlistController");
 const { cartv, getCartV } = require("../../validators/user/cart");
 const { createCartCtrl, getCartCtrl, deleteCartCtrl, getoneCartCtrl, updateCartCtrl } = require("../../controller/User/CartController");
@@ -23,7 +23,7 @@ router.get("/all", getCartV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ['query'] })
         const category = await getCartCtrl(query)
-        return successResponce(req, res, category)
+        return successResponse(req, res, category)
     } catch (error) {
         return next(error);
     }
@@ -35,7 +35,7 @@ router.put("/update/:id",userAuth, cartv, expressValidatorMw, async (req, res, n
         ctrlData.cartId = req.params.id
         ctrlData.userId = req.user.Id
         const category = await updateCartCtrl(ctrlData)
-        return successResponce(req,res, category)
+        return successResponse(req,res, category)
     } catch (error) {
         return next(error);
     }
@@ -45,7 +45,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         const ctrlData = { categoryId: req.params.id }
         const cartData = await getoneCartCtrl(ctrlData)
-        return successResponce(req, res, cartData)
+        return successResponse(req, res, cartData)
     } catch (e) {
         return next(e)
     }

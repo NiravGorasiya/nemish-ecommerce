@@ -4,7 +4,7 @@ const { matchedData } = require("express-validator");
 const { categoryv, getCategoryV } = require("../../validators/categoryv");
 const expressValidatorMw = require("../../middlewares/validate");
 const { createCategoryCtrl, getCategoryCtrl, updateCategoryCtrl, deleteCategoryCtrl, getoneCategoryCtrl } = require("../../controller/Admin/Category/Category");
-const { createResponse, successResponce ,deleteResponce} = require("../../utils/sendResponse");
+const { createResponse, successResponse ,deleteResponce} = require("../../utils/sendResponse");
 
 router.post("/add", categoryv, expressValidatorMw, async (req, res, next) => {
     try {
@@ -20,7 +20,7 @@ router.get("/all", getCategoryV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ['query'] })
         const category = await getCategoryCtrl(query)
-        return successResponce(req, res, category)
+        return successResponse(req, res, category)
     } catch (error) {
         return next(error);
     }
@@ -31,7 +31,7 @@ router.put("/update/:id", categoryv, expressValidatorMw, async (req, res, next) 
         const ctrlData = matchedData(req, { locations: ["body"] });
         ctrlData.categoryId = req.params.id
         const category = await updateCategoryCtrl(ctrlData)
-        return successResponce(req,res, category)
+        return successResponse(req,res, category)
     } catch (error) {
         return next(error);
     }
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         const ctrlData = { categoryId: req.params.id }
         const categoryData = await getoneCategoryCtrl(ctrlData)
-        return successResponce(req, res, categoryData)
+        return successResponse(req, res, categoryData)
     } catch (e) {
         return next(e)
     }

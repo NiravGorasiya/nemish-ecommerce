@@ -3,7 +3,7 @@ const { matchedData } = require("express-validator");
 
 const expressValidatorMw = require("../../middlewares/validate");
 const { createProductDetailsCtrl,getAllProdctDetailsCtrl } = require("../../controller/Admin/ProductDetails/ProductDetails");
-const { createResponse, successResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse } = require("../../utils/sendResponse");
 const { productDetailsValidation, getProductV } = require("../../validators/productdetails");
 
 router.post("/add", productDetailsValidation, expressValidatorMw, async (req, res, next) => {
@@ -20,7 +20,7 @@ router.get("/all", getProductV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ['query'] })
         const product = await getAllProdctDetailsCtrl(query)
-        return successResponce(req, res, product)
+        return successResponse(req, res, product)
     } catch (error) {
         return next(error);
     }

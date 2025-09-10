@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { matchedData } = require("express-validator");
 
 const expressValidatorMw = require("../../middlewares/validate");
-const { createResponse, successResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse } = require("../../utils/sendResponse");
 const userAuth = require("../../middlewares/auth");
 const { orderv, getOrderV, createOrder ,paymentSuccess} = require("../../validators/user/order");
 const { createOrderCtrl, getUserOrderCtrl, createUserOrderCtrl, createPaymentSuccessCtrl } = require("../../controller/User/OrderController");
@@ -23,7 +23,7 @@ router.get("/userorder", userAuth,getOrderV, expressValidatorMw, async (req, res
         const query = matchedData(req, { locations: ['query'] })
         query.userId = req.user.Id
         const category = await getUserOrderCtrl(query)
-        return successResponce(req, res, category)
+        return successResponse(req, res, category)
     } catch (error) {
         return next(error);
     }
@@ -34,7 +34,7 @@ router.post("/create-order", userAuth, createOrder,expressValidatorMw, async (re
         const query = matchedData(req, { locations: ['body'] })
         query.userId = req.user.Id
         const createOrder = await createUserOrderCtrl(query)
-        return successResponce(req, res, createOrder)
+        return successResponse(req, res, createOrder)
     } catch (error) {
         return next(error);
     }
@@ -45,7 +45,7 @@ router.post("/payment-success", userAuth, paymentSuccess,expressValidatorMw, asy
         const query = matchedData(req, { locations: ['body'] })
         query.userId = req.user.Id
         const createOrder = await createPaymentSuccessCtrl(query)
-        return successResponce(req, res, createOrder)
+        return successResponse(req, res, createOrder)
     } catch (error) {
         return next(error);
     }

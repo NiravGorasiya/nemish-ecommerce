@@ -10,7 +10,7 @@ const {
     deleteSizeCtrl, 
     getOneSizeCtrl 
 } = require("../../controller/Admin/Sizes/Sizes");
-const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse, deleteResponce } = require("../../utils/sendResponse");
 
 // Add a new Size
 router.post("/add", sizev, expressValidatorMw, async (req, res, next) => {
@@ -28,7 +28,7 @@ router.get("/all", getSizeV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ["query"] });
         const sizes = await getSizesCtrl(query);
-        return successResponce(req, res, sizes);
+        return successResponse(req, res, sizes);
     } catch (error) {
         return next(error);
     }
@@ -40,7 +40,7 @@ router.put("/update/:id", sizev, expressValidatorMw, async (req, res, next) => {
         const ctrlData = matchedData(req, { locations: ["body"] });
         ctrlData.sizeId = req.params.id;
         const size = await updateSizeCtrl(ctrlData);
-        return successResponce(req, res, size);
+        return successResponse(req, res, size);
     } catch (error) {
         return next(error);
     }
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res, next) => {
     try {
         const ctrlData = { sizeId: req.params.id };
         const sizeData = await getOneSizeCtrl(ctrlData);
-        return successResponce(req, res, sizeData);
+        return successResponse(req, res, sizeData);
     } catch (error) {
         return next(error);
     }

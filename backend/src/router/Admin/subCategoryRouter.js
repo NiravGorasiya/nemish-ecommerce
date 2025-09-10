@@ -3,7 +3,7 @@ const { matchedData } = require("express-validator");
 
 const expressValidatorMw = require("../../middlewares/validate");
 const { createSubCategoryCtrl, getSubCategoryCtrl, updateSubCategoryCtrl, deleteSubCategoryCtrl, getoneSubCategoryCtrl } = require("../../controller/Admin/SubCategory/SubCategory");
-const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse, deleteResponce } = require("../../utils/sendResponse");
 const { subcategoryv, getSubCategoryV } = require("../../validators/subcategoryv");
 
 router.post("/add", subcategoryv, expressValidatorMw, async (req, res, next) => {
@@ -20,7 +20,7 @@ router.get("/all", getSubCategoryV, expressValidatorMw, async (req, res, next) =
     try {
         const query = matchedData(req, { locations: ['query'] })
         const subcategory = await getSubCategoryCtrl(query)
-        return successResponce(req, res, subcategory)
+        return successResponse(req, res, subcategory)
     } catch (error) {
         return next(error);
     }
@@ -31,7 +31,7 @@ router.put("/update/:id", subcategoryv, expressValidatorMw, async (req, res, nex
         const ctrlData = matchedData(req, { locations: ["body"] });
         ctrlData.subCategoryId = req.params.id
         const subcategory = await updateSubCategoryCtrl(ctrlData)
-        return successResponce(req, res, subcategory)
+        return successResponse(req, res, subcategory)
     } catch (error) {
         return next(error);
     }
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         const ctrlData = { subcategoryId: req.params.id }
         const subCategoryData = await getoneSubCategoryCtrl(ctrlData)
-        return successResponce(req, res, subCategoryData)
+        return successResponse(req, res, subCategoryData)
     } catch (e) {
         return next(e)
     }

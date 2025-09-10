@@ -5,7 +5,7 @@ const createResponse = (req,res,data)=>{
 }
 
 // Send success response (request , response , data that you want to pass)
-const successResponce = (req,res,data)=>{    
+const successResponse = (req,res,data)=>{    
     res.status(200);
     res.json({isSuccess:true,status:200, info:data});
 }
@@ -23,11 +23,11 @@ const queryErrorRelatedResponse = (req,res,status,data)=>{
 }
 
 // Send success response of avatar(Image) (request , response , message and baseURL)
-const successResponceOfAvatar = (req,res,message,baseurl)=>{    
+const successResponseOfAvatar = (req,res,message,baseurl)=>{    
     res.status(200);
     res.json({isSuccess:true,status:200, message,baseurl});
 }
 
 module.exports = {
-    createResponse,successResponce,deleteResponce,
-    queryErrorRelatedResponse,successResponceOfAvatar}
+    createResponse,successResponse,deleteResponce,
+    queryErrorRelatedResponse,successResponseOfAvatar}

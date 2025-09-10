@@ -4,7 +4,7 @@ const { matchedData } = require("express-validator");
 const expressValidatorMw = require("../../middlewares/validate");
 const { productv, getProductV } = require("../../validators/product");
 const { createProductCtrl, getAllProdctCtrl, updateProductCtrl, deleteProductCtrl, getoneProductCtrl } = require("../../controller/Admin/Product/Product");
-const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse, deleteResponce } = require("../../utils/sendResponse");
 const upload = require("../../utils/imageupload");
 
 router.post("/add", upload.array("images", 10), productv, expressValidatorMw, async (req, res, next) => {
@@ -21,7 +21,7 @@ router.get("/all", getProductV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ['query'] })
         const product = await getAllProdctCtrl(query)
-        return successResponce(req, res, product)
+        return successResponse(req, res, product)
     } catch (error) {
         return next(error);
     }
@@ -32,7 +32,7 @@ router.put("/update/:productId", upload.array("images",10), productv, expressVal
         const ctrlData = matchedData(req, { locations: ["body"] });
         const productId = req.params.productId
         const attribute = await updateProductCtrl(productId, ctrlData, req.files)
-        return successResponce(req, res, attribute)
+        return successResponse(req, res, attribute)
     } catch (error) {
         return next(error);
     }
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res, next) => {
     try {
         const ctrlData = { productId: req.params.id }
         const attributeData = await getoneProductCtrl(ctrlData)
-        return successResponce(req, res, attributeData)
+        return successResponse(req, res, attributeData)
     } catch (e) {
         return next(e)
     }

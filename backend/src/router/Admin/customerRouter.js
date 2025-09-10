@@ -4,13 +4,13 @@ const { getCustomersCtrl } = require("../../controller/Admin/Customer/Customer")
 const { getCustomerV } = require("../../validators/customer");
 const expressValidatorMw = require("../../middlewares/validate");
 const { matchedData } = require("express-validator");
-const { successResponce } = require("../../utils/sendResponse");
+const { successResponse } = require("../../utils/sendResponse");
 
 router.get("/all", getCustomerV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ["query"] });
         const customers = await getCustomersCtrl(query);
-        return successResponce(req, res, customers);
+        return successResponse(req, res, customers);
     } catch (error) {
         return next(error);
     }

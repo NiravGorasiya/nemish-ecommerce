@@ -10,7 +10,7 @@ const {
     deleteColourCtrl, 
     getOneColourCtrl 
 } = require("../../controller/Admin/Colour/Colour");
-const { createResponse, successResponce, deleteResponce } = require("../../utils/sendResponse");
+const { createResponse, successResponse, deleteResponce } = require("../../utils/sendResponse");
 
 // Add a new Colour
 router.post("/add", colourv, expressValidatorMw, async (req, res, next) => {
@@ -28,7 +28,7 @@ router.get("/all", getColourV, expressValidatorMw, async (req, res, next) => {
     try {
         const query = matchedData(req, { locations: ["query"] });
         const colours = await getColoursCtrl(query);
-        return successResponce(req, res, colours);
+        return successResponse(req, res, colours);
     } catch (error) {
         return next(error);
     }
@@ -40,7 +40,7 @@ router.put("/update/:id", colourv, expressValidatorMw, async (req, res, next) =>
         const ctrlData = matchedData(req, { locations: ["body"] });
         ctrlData.colourId = req.params.id;
         const colour = await updateColourCtrl(ctrlData);
-        return successResponce(req, res, colour);
+        return successResponse(req, res, colour);
     } catch (error) {
         return next(error);
     }
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res, next) => {
     try {
         const ctrlData = { colourId: req.params.id };
         const colourData = await getOneColourCtrl(ctrlData);
-        return successResponce(req, res, colourData);
+        return successResponse(req, res, colourData);
     } catch (error) {
         return next(error);
     }

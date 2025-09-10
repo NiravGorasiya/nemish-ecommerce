@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { matchedData } = require("express-validator");
 
 const expressValidatorMw = require("../../middlewares/validate");
-const { createResponse, successResponce ,deleteResponce} = require("../../utils/sendResponse");
+const { createResponse, successResponse ,deleteResponce} = require("../../utils/sendResponse");
 const { wishlistv } = require("../../validators/user/wishlist");
 const { createWhishlistCtrl,getWhishlisCtrl,deleteWhishlistCtrl } = require("../../controller/User/WishlistController");
 const auth = require("../../middlewares/auth");
@@ -23,7 +23,7 @@ router.get("/all",auth, expressValidatorMw, async (req, res, next) => {
         const query = matchedData(req, { locations: ['query'] })
         query.userId = req.user.Id        
         const category = await getWhishlisCtrl(query)
-        return successResponce(req, res, category)
+        return successResponse(req, res, category)
     } catch (error) {
         return next(error);
     }

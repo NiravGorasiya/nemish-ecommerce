@@ -13,7 +13,7 @@ const {
   userSendEmailController,
   userResetPasswordController,
 } = require("../../controller/UserController");
-const { successResponce, createResponse } = require("../../utils/sendResponse");
+const { successResponse, createResponse } = require("../../utils/sendResponse");
 const userAuth = require("../../middlewares/auth");
 
 router.post("/signup", registerv, expressValidatorMw, async (req, res, next) => {
@@ -41,7 +41,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/profile', userAuth, async (req, res, next) => {
   try {
     const user = await userProfileController(req);
-    return successResponce(req, res, user)
+    return successResponse(req, res, user)
   } catch (error) {
     return next(error);
   }
@@ -50,7 +50,7 @@ router.post('/profile', userAuth, async (req, res, next) => {
 router.post('/changepassword', userAuth, async (req, res, next) => {
   try {
     const user = await userChangePasswordController(req);
-    return successResponce(req, res, "user change password successfull")
+    return successResponse(req, res, "user change password successfull")
   } catch (error) {
     return next(error);
   }
@@ -60,7 +60,7 @@ router.post('/sendemail', async (req, res, next) => {
   const { email } = req.body
   try {
     const token = await userSendEmailController(email);
-    return successResponce(req, res, "user send email successfull")
+    return successResponse(req, res, "user send email successfull")
 
   } catch (error) {
     return next(error);
@@ -72,7 +72,7 @@ router.post('/reset-password/:token', async (req, res, next) => {
   const { password } = req.body
   try {
     const user= await userResetPasswordController(token,password);
-    return successResponce(req, res, "user password send email successfull")
+    return successResponse(req, res, "user password send email successfull")
 
   } catch (error) {
     return next(error);

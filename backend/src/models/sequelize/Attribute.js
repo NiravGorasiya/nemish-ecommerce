@@ -17,10 +17,6 @@ try {
                     name: {
                         type: DataTypes.STRING,
                         allowNull: true
-                    },
-                    productId: {
-                        type: DataTypes.STRING,
-                        allowNull: false
                     }
                 },
                 {

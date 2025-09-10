@@ -2,7 +2,7 @@ const sequelize = require("../../../models/sequelize");
 const { DataNotFoundError } = require("../../../errors");
 const { createModelItemQ, findModelItemsQ, findModelItemQ } = require("../../../queries/generic");
 const { convertQuery } = require("../../../utils/paginationUtils");
-const BASE_IMAGE_URL = "http://localhost:3001/uploads/";
+const BASE_IMAGE_URL = "http://localhost:5000/uploads/";
 
 const createProductCtrl = async (ctrlData, files) => {
   // Step 1: Create the main product

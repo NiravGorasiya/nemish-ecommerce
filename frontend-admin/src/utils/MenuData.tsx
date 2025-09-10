@@ -46,6 +46,11 @@ export const menuItems: MenuItem[] = [
         link: "/customer",
     },
     {
+        title: "Attribute",
+        icon: "add_box",
+        link: "/attribute",
+    },
+    {
         title: "Orders",
         icon: "shopping_cart",
         link: "#",

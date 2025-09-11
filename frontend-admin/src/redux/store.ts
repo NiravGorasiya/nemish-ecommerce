@@ -7,6 +7,7 @@ import { colorSlice } from './slice/colorSlice';
 import { customerSlice } from './slice/customerSlice';
 import { sizeSlice } from './slice/sizeSlice';
 import { attributeSlice } from './slice/attributeSlice';
+import { couponSlice } from './slice/couponSlice';
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         [authApi.reducerPath]:authApi.reducer,
         [sizeSlice.reducerPath]:sizeSlice.reducer,
         [attributeSlice.reducerPath]:attributeSlice.reducer,
+        [couponSlice.reducerPath]:couponSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -29,6 +31,7 @@ export const store = configureStore({
             .concat(colorSlice.middleware)
             .concat(customerSlice.middleware)
             .concat(attributeSlice.middleware)
+            .concat(couponSlice.middleware)
 
 })
 

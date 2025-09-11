@@ -18,6 +18,7 @@ import SubCategory from './page/SubCategory';
 import Size from './page/Size';
 import Customer from './page/Customer';
 import Attribute from './page/Attribute';
+import Coupon from './page/Coupon';
 
 const App: React.FC = () => {
   return (
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             <Route path="/product/detail/:id" element={<ProductDetails />} />
             <Route path="/order" element={<ProductDetails />} />
             <Route path="/attribute" element={<Attribute />} />
+            <Route path="/coupon" element={<Coupon />} />
           </Route>
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />

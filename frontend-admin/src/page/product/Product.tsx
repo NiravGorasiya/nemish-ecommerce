@@ -1,24 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import * as Yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+
 import Sidebar from "../../layouts/commonComponent/Sidebar";
 import Header from "../../layouts/commonComponent/Header";
 import Footer from "../../layouts/commonComponent/Footer";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useGetSubCategoryQuery } from "../../redux/slice/subCategory";
-import { useCreateProductMutation } from "../../redux/slice/productSlice";
+import {
+  useCreateProductMutation,
+  useGetProductDetailQuery,
+  useUpdateProductMutation,
+} from "../../redux/slice/productSlice";
 import MultiSelected from "../../utils/MultiSelected";
 import ColorImageGroupUploader from "../../utils/ColorImageGroupUploader";
 import { useGetColourQuery } from "../../redux/slice/colorSlice";
+import { useGetCategoriesQuery } from "../../redux/slice/categorySlice";
 
 interface FormValues {
   name: string;
   title: string;
+  stockStatus: string;
   description: string;
   price: number;
+  stockQuantity: number;
   finalPrice: number;
-  status: string;
   SKU: string;
   subcategoryId: string;
+  categoryId: string;
   size_id: string[];
   colorImages: {
     colorId: string;
@@ -43,31 +52,62 @@ const validationSchema = Yup.object({
     .typeError("final price must be number")
     .positive("Final price must be a positive number")
     .required("Final price is required"),
-  status: Yup.string().required("status is required"),
   subcategoryId: Yup.string().required("select subcategory is required"),
-  SKU: Yup.string().required("SKU is required"),
+  categoryId: Yup.string().required("select category is required"),
+  stockStatus: Yup.string().required("Select stock status is required"),
 });
 
 const Product: React.FC = () => {
-  const initialValues: FormValues = {
+  const { id } = useParams<{ id: string }>();
+  const numericId: any = id ? parseInt(id, 10) : undefined;
+  const { data: productDetail }: any = useGetProductDetailQuery(numericId);
+
+  const isEditMode = Boolean(id);
+
+  const { data } = useGetSubCategoryQuery({});
+  const { data: category } = useGetCategoriesQuery();
+  const { data: colorData } = useGetColourQuery();
+
+  const [createProduct] = useCreateProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
+  const [initialValues, setInitialValues] = useState<FormValues>({
     name: "",
     title: "",
     description: "",
     price: 0,
+    stockStatus: "",
+    stockQuantity: 0,
     finalPrice: 0,
     subcategoryId: "",
-    status: "",
+    categoryId: "",
     SKU: "",
     size_id: [],
     colorImages: [],
-  };
+  });
 
-  const { data } = useGetSubCategoryQuery({});
-  const { data: colorData } = useGetColourQuery();
-
-  const [createProduct] = useCreateProductMutation();
   const subcategoryData = data?.info;
+  const categoryData = category?.info?.rows;
   const colorsDatas = colorData?.info?.rows;
+
+  useEffect(() => {
+    if (productDetail?.info) {
+      const p = productDetail.info;
+      setInitialValues({
+        name: p.name || "",
+        title: p.title || "",
+        description: p.description || "",
+        price: p.price || 0,
+        stockStatus: p.stockStatus || "",
+        stockQuantity: p.stockQuantity || 0,
+        finalPrice: p.finalPrice || 0,
+        subcategoryId: p.subcategoryId || "",
+        categoryId: p.categoryId || "",
+        SKU: p.SKU || "",
+        size_id: p.size_id || [],
+        colorImages: p.colorImages || [],
+      });
+    }
+  }, [productDetail]);
 
   const onsubmit = async (
     values: FormValues,
@@ -80,8 +120,9 @@ const Product: React.FC = () => {
     formData.append("subcategoryId", values.subcategoryId);
     formData.append("price", values.price.toString());
     formData.append("finalPrice", values.finalPrice.toString());
-    formData.append("status", values.status);
-    formData.append("SKU", values.SKU);
+    formData.append("stockQuantity", values.stockQuantity.toString());
+    formData.append("categoryId", values.categoryId);
+    formData.append("stockStatus", values.stockStatus);
 
     values.size_id.forEach((sizeId) => {
       formData.append("size_id[]", sizeId);
@@ -89,12 +130,17 @@ const Product: React.FC = () => {
 
     values.colorImages.forEach(({ colorId, images }) => {
       images.forEach((imgObj) => {
-        formData.append("color_id[]", colorId); 
-        formData.append("images", imgObj.file); 
+        formData.append("color_id[]", colorId);
+        formData.append("images", imgObj.file);
       });
     });
+
     try {
-      const response = await createProduct(formData).unwrap();
+      if (isEditMode) {
+        await updateProduct({ id: numericId, body: formData }).unwrap();
+      } else {
+        await createProduct(formData).unwrap();
+      }
     } catch (err: any) {
       if (err.status) {
         console.error("Server responded with error:", err.status, err.data);
@@ -111,50 +157,55 @@ const Product: React.FC = () => {
         <Header />
         <section className="content-main">
           <Formik
+          enableReinitialize 
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onsubmit}
           >
             {({ isSubmitting, values, setFieldValue, errors }) => {
               return (
-                <div>
+                <Form>
                   <div className="row">
-                    <Form>
-                      <div className="col-9">
-                        <div className="content-header">
-                          <h2 className="content-title">Add New Product</h2>
-                          <div>
-                            <button
-                              type="submit"
-                              className="btn btn-light rounded font-sm mr-5 text-body hover-up"
-                              disabled={isSubmitting}
-                            >
-                              Save to draft
-                            </button>
-                            <button className="btn btn-md rounded font-sm hover-up">
-                              Publich
-                            </button>
-                          </div>
+                    <div className="col-12">
+                      <div className="content-header d-flex justify-between items-center mb-4">
+                        <h2 className="content-title">Add New Product</h2>
+                        <div>
+                          <button
+                            type="submit"
+                            className="btn btn-light rounded font-sm mr-3 text-body hover-up"
+                            disabled={isSubmitting}
+                          >
+                            Save to Draft
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-md rounded font-sm hover-up"
+                          >
+                            Publish
+                          </button>
                         </div>
                       </div>
-                      <div className="col-lg-12">
-                        <div className="card mb-4">
-                          <div className="card-header">
-                            <h4>Product</h4>
-                          </div>
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-md-6 mb-4">
+                    </div>
+
+                    <div className="col-lg-8">
+                      <div className="card mb-4">
+                        <div className="card-header">
+                          <h4>Product Details</h4>
+                        </div>
+                        <div className="card-body">
+                          <div className="row">
+                            <div className="col-md-6">
+                              <div className="mb-4">
                                 <label
                                   htmlFor="product_name"
                                   className="form-label"
                                 >
-                                  Product name
+                                  Product Name
                                 </label>
                                 <Field
                                   type="text"
-                                  id="name"
-                                  placeholder="Enter product name"
+                                  id="product_name"
+                                  placeholder="Enter Product Name"
                                   name="name"
                                   className="form-control"
                                 />
@@ -164,9 +215,76 @@ const Product: React.FC = () => {
                                   className="error"
                                 />
                               </div>
-                              <div className="col-md-6 mb-4">
+
+                              <div className="mb-4">
                                 <label
-                                  htmlFor="product_subcategory"
+                                  htmlFor="product_title"
+                                  className="form-label"
+                                >
+                                  Product Title
+                                </label>
+                                <Field
+                                  type="text"
+                                  id="product_title"
+                                  placeholder="Enter Product Title"
+                                  name="title"
+                                  className="form-control"
+                                />
+                                <ErrorMessage
+                                  name="title"
+                                  component="div"
+                                  className="error"
+                                />
+                              </div>
+
+                              <div className="mb-4">
+                                <label htmlFor="size_id" className="form-label">
+                                  Size
+                                </label>
+                                <Field
+                                  name="size_id"
+                                  component={MultiSelected}
+                                />
+                                <ErrorMessage
+                                  name="size_id"
+                                  component="div"
+                                  className="error"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col-md-6">
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="subcategory"
+                                  className="form-label"
+                                >
+                                  Category
+                                </label>
+                                <Field
+                                  as="select"
+                                  name="categoryId"
+                                  className="form-select"
+                                >
+                                  <option value="">Select Category</option>
+                                  {categoryData?.map((category) => (
+                                    <option
+                                      key={category.Id}
+                                      value={category.Id}
+                                    >
+                                      {category?.name}
+                                    </option>
+                                  ))}
+                                </Field>
+                                <ErrorMessage
+                                  name="categoryId"
+                                  component="div"
+                                  className="error"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="subcategory"
                                   className="form-label"
                                 >
                                   Subcategory
@@ -176,6 +294,7 @@ const Product: React.FC = () => {
                                   name="subcategoryId"
                                   className="form-select"
                                 >
+                                  <option value="">Select Subcategory</option>
                                   {subcategoryData?.map((subcategory) => (
                                     <option
                                       key={subcategory.Id}
@@ -191,143 +310,128 @@ const Product: React.FC = () => {
                                   className="error"
                                 />
                               </div>
-                            </div>
-                            <div className="row">
-                              <div className="col-md-6 mb-4">
+                              <div className="mb-4">
                                 <label
-                                  htmlFor="product_title"
+                                  htmlFor="stockQuantity"
                                   className="form-label"
                                 >
-                                  Product title
+                                  Stock Quantity
                                 </label>
                                 <Field
-                                  type="text"
-                                  id="title"
-                                  placeholder="Enter product title"
-                                  name="title"
+                                  type="number"
+                                  id="stockQuantity"
+                                  placeholder="Enter Product Stock Quantity"
+                                  name="stockQuantity"
                                   className="form-control"
                                 />
                                 <ErrorMessage
-                                  name="title"
+                                  name="stockQuantity"
                                   component="div"
                                   className="error"
                                 />
-                              </div>
-                              <div className="col-md-6 mb-4">
-                                <label htmlFor="sku" className="form-label">
-                                  SKU
-                                </label>
-                                <Field
-                                  type="text"
-                                  id="sku"
-                                  placeholder="Enter product SKU"
-                                  name="SKU"
-                                  className="form-control"
-                                />
-                                <ErrorMessage
-                                  name="SKU"
-                                  component="div"
-                                  className="error"
-                                />
-                              </div>
-                            </div>
-                            <div className="row">
-                              <div className="col-md-6 mb-4">
-                                <label
-                                  htmlFor="description"
-                                  className="form-label"
-                                >
-                                  Full description
-                                </label>
-                                <Field
-                                  as="textarea"
-                                  placeholder="Enter product description"
-                                  name="description"
-                                  className="form-control"
-                                  rows={4}
-                                />
-                                <ErrorMessage
-                                  name="description"
-                                  component="div"
-                                  className="error"
-                                />
-                              </div>
-                              <div className="col-md-6 mb-4">
-                                <label htmlFor="size_id" className="form-label">
-                                  Size
-                                </label>
-                                <Field
-                                  name="size_id"
-                                  component={MultiSelected}
-                                />
-                                <ErrorMessage
-                                  name="size_id"
-                                  component="div"
-                                  className="error"
-                                />
-                              </div>
-                            </div>
-                            <div className="row">
-                              <div className="col-md-4 mb-4">
-                                <label className="form-label">Price</label>
-                                <Field
-                                  placeholder="₹"
-                                  name="price"
-                                  type="text"
-                                  className="form-control"
-                                />
-                                <ErrorMessage
-                                  name="price"
-                                  component="div"
-                                  className="error"
-                                />
-                              </div>
-                              <div className="col-md-4 mb-4">
-                                <label className="form-label">
-                                  Final price
-                                </label>
-                                <Field
-                                  placeholder="₹"
-                                  name="finalPrice"
-                                  type="text"
-                                  className="form-control"
-                                />
-                                <ErrorMessage
-                                  name="finalPrice"
-                                  component="div"
-                                  className="error"
-                                />
-                              </div>
-                              <div className="col-md-4 mb-4">
-                                <label className="form-label">Status</label>
-                                <Field
-                                  as="select"
-                                  name="status"
-                                  className="form-select"
-                                >
-                                  <option value="active"> Active </option>
-                                  <option value="inactive"> Inactive </option>
-                                </Field>
                               </div>
                             </div>
                           </div>
+
+                          <div className="mb-4">
+                            <label htmlFor="description" className="form-label">
+                              Full Description
+                            </label>
+                            <Field
+                              as="textarea"
+                              id="description"
+                              placeholder="Enter Product Description"
+                              name="description"
+                              className="form-control"
+                              rows={4}
+                            />
+                            <ErrorMessage
+                              name="description"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
                         </div>
-                        <ColorImageGroupUploader
-                          colorImages={values.colorImages}
-                          setColorImages={(val) =>
-                            setFieldValue("colorImages", val)
-                          }
-                          availableColors={
-                            colorsDatas?.map((color) => ({
-                              id: color.Id.toString(),
-                              name: color.name,
-                            })) || []
-                          }
-                        />
                       </div>
-                    </Form>
+
+                      <ColorImageGroupUploader
+                        colorImages={values.colorImages}
+                        setColorImages={(val) =>
+                          setFieldValue("colorImages", val)
+                        }
+                        availableColors={
+                          colorsDatas?.map((color) => ({
+                            id: color.Id.toString(),
+                            name: color.name,
+                          })) || []
+                        }
+                      />
+                    </div>
+                    <div className="col-lg-4">
+                      <div className="card">
+                        <div className="card-header">
+                          <h4>Price Details</h4>
+                        </div>
+                        <div className="p-3">
+                          <div className="mb-4">
+                            <label htmlFor="price" className="form-label">
+                              Price
+                            </label>
+                            <Field
+                              placeholder="₹"
+                              name="price"
+                              type="text"
+                              id="price"
+                              className="form-control"
+                            />
+                            <ErrorMessage
+                              name="price"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+
+                          <div className="mb-4">
+                            <label htmlFor="finalPrice" className="form-label">
+                              Final Price
+                            </label>
+                            <Field
+                              placeholder="₹"
+                              name="finalPrice"
+                              type="text"
+                              id="finalPrice"
+                              className="form-control"
+                            />
+                            <ErrorMessage
+                              name="finalPrice"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label htmlFor="stockStatus" className="form-label">
+                              Stock Status
+                            </label>
+                            <Field
+                              as="select"
+                              name="stockStatus"
+                              className="form-select"
+                            >
+                              <option value="">Select stock Status</option>
+                              <option value="in_stock">In Stock</option>
+                              <option value="out_of_stock">Out of Stock</option>
+                            </Field>
+                            <ErrorMessage
+                              name="stockStatus"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Form>
               );
             }}
           </Formik>

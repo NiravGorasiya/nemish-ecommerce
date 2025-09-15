@@ -20,12 +20,12 @@ const VerticalSlider = () => {
             >
                 <ul>
                 <SwiperSlide>
-                    <li>
+                    {/* <li>
                         Get great devices up to 50% off
                         <Link href="/products/shop-grid-right">
                             <a>View details</a>
                         </Link>
-                    </li>
+                    </li> */}
                 </SwiperSlide>
                 <SwiperSlide>
                     <li>Supper Value Deals - Save more with coupons</li>

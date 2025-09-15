@@ -90,7 +90,7 @@ const ProductList = () => {
                                                 variant='brand'
                                                 size="sm"
                                                 className='font-sm rounded mx-1'
-                                                onClick={() => handleEdit(product)}
+                                                onClick={() => navigate(`/product/edit/${product?.Id}`)}
                                             >
                                                 <i className="material-icons md-edit"></i> Edit
                                             </Button>

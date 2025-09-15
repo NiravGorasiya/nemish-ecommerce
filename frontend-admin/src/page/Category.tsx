@@ -36,8 +36,10 @@ const Category: React.FC = () => {
     const handleSubmit = async() => {
         if (categoryId) {
             await updateCategory({ Id: categoryId, name });
+            setName('')
         } else {
             await createCategory({ name });
+            setName('')
         }
         setPopupVisible(false);
     }

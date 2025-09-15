@@ -56,7 +56,7 @@ const Header = ({
                                         <li>
                                             <i className="fi-rs-smartphone"></i>
                                             <Link href="/#">
-                                                <a>(+01) - 2345 - 6789</a>
+                                                <a>+91 7069224753</a>
                                             </Link>
                                         </li>
                                         <li>
@@ -66,23 +66,6 @@ const Header = ({
                                             </Link>
                                         </li>
                                     </ul>
-                                </div>
-                            </div>
-                            <div className="col-xl-6 col-lg-4">
-                                <div className="text-center">
-                                    <div
-                                        id="news-flash"
-                                        className="d-inline-block"
-                                    >
-                                        <ul>
-                                            <li>
-                                                Get great devices up to 50% off
-                                                <Link href="/products/shop-grid-right">
-                                                    <a> View details</a>
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                             <div className="col-xl-3 col-lg-4">
@@ -936,9 +919,6 @@ const Header = ({
                                                 </ul>
                                             </li>
                                         </ul>
-                                        <div className="more_categories">
-                                            Show more...
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">

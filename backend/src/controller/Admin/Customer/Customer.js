@@ -4,7 +4,7 @@ const { convertQuery } = require("../../../utils/paginationUtils");
 const getCustomersCtrl = async (queryData) => {
     const { offset, limit } = await convertQuery(queryData.page, queryData.limit);
 
-    const colours = await findModelItemsQ('Customer', {}, {
+    const customer = await findModelItemsQ('Customer', {}, {
         offset,
         limit,
         order: [
@@ -12,8 +12,7 @@ const getCustomersCtrl = async (queryData) => {
         ],
         raw: true
     });
-
-    return colours;
+    return customer;
 };
 
 

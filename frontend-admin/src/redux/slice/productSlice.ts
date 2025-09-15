@@ -27,7 +27,7 @@ export const productSlice = createApi({
             query: () => "/all",
             providesTags: ['product']
         }),
-        getProductDetail: builder.query<apiResponse, string>({
+        getProductDetail: builder.query<apiResponse, number | string>({
             query: (id) => `/${id}`,
             providesTags: ['product']
         }),
@@ -45,11 +45,21 @@ export const productSlice = createApi({
                 method: "DELETE"
             }),
             invalidatesTags: (result, error, id) => [{ type: 'product' }]
-        })
+        }),
+        updateProduct: builder.mutation<any, { id: number | string; body: FormData }>({
+            query: ({ id, body }) => ({
+                url: `/update/${id}`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ['product'],
+        }),
     })
 })
 
 export const { useGetProductQuery,
     useCreateProductMutation,
     useGetProductDetailQuery,
-    useDeleteProductMutation } = productSlice;
+    useDeleteProductMutation,
+    useUpdateProductMutation
+} = productSlice;

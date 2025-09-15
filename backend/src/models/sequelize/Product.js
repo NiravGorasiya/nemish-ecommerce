@@ -54,6 +54,10 @@ try {
                         type: DataTypes.FLOAT,
                         allowNull: false
                     },
+                    stockStatus: {
+                        type: DataTypes.ENUM('in_stock', 'out_of_stock'),
+                        allowNull: false
+                    },
                     status: {
                         type: DataTypes.ENUM('active', 'inactive'),
                         allowNull: false,

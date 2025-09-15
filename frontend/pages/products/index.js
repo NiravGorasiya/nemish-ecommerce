@@ -282,4 +282,4 @@ const mapDidpatchToProps = {
     // fetchMoreProduct,
 };
 
-export default connect(mapStateToProps, mapDidpatchToProps)(Products);
+export default Products;

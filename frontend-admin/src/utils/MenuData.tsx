@@ -58,13 +58,6 @@ export const menuItems: MenuItem[] = [
   {
     title: "Orders",
     icon: "shopping_cart",
-    link: "#",
-    submenu: [
-      { title: "Order List 1", link: "#" },
-      { title: "Order List 2", link: "#" },
-      { title: "Order Detail", link: "#" },
-      { title: "Order Tracking", link: "#" },
-      { title: "Invoice", link: "#" },
-    ],
+    link: "/order",
   },
 ];

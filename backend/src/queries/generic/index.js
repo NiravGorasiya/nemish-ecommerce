@@ -12,6 +12,9 @@ const findModelItemsQ = async (modelName, where = {}, options = {}, count = true
     };
 
     const model = sequelize.models[modelName];
+    if (!model) {
+    throw new Error(`Model "${modelName}" not found in sequelize.models`);
+  }
 
     return count
         ? await model.findAndCountAll(finalOptions)

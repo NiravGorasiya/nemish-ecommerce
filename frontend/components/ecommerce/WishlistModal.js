@@ -24,12 +24,12 @@ const WishlistModal = ({
     return (
         <>
             <Modal
-                open={wishlist.modal ? true : false}
+                open={wishlist?.modal ? true : false}
                 onClose={closeWishlistModal}
                 center={true}
                 classNames={{ modal: "full-modal" }}
             >
-                {wishlist.items.length > 0 ? (
+                {wishlist?.items?.length > 0 ? (
                     <div className="table-responsive">
                         <table className="table">
                             <tbody>
@@ -49,7 +49,7 @@ const WishlistModal = ({
                                     </td>
                                 </tr>
 
-                                {wishlist.items.map((product) => (
+                                {wishlist?.items?.map((product) => (
                                     <tr>
                                         <td>
                                             <img

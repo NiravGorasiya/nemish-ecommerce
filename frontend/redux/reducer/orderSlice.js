@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const orderSlice = createApi({
     reducerPath: 'orderApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3001/api/order',
+        baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/order`,
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('token');
             if (token) {

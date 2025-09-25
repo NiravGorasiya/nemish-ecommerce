@@ -17,7 +17,6 @@ sequelize.authenticate().then(async () => {
     logger.info('Authentication Successful ')
 }).catch((error) => {
     throw new Error(error)
-    logger.log('Error: ', error)
 })
 
 module.exports = sequelize

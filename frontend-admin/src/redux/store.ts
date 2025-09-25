@@ -8,6 +8,7 @@ import { customerSlice } from './slice/customerSlice';
 import { sizeSlice } from './slice/sizeSlice';
 import { attributeSlice } from './slice/attributeSlice';
 import { couponSlice } from './slice/couponSlice';
+import { orderSlice } from './slice/orderSlice';
 
 export const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
         [sizeSlice.reducerPath]:sizeSlice.reducer,
         [attributeSlice.reducerPath]:attributeSlice.reducer,
         [couponSlice.reducerPath]:couponSlice.reducer,
+        [orderSlice.reducerPath]:orderSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -32,6 +34,7 @@ export const store = configureStore({
             .concat(customerSlice.middleware)
             .concat(attributeSlice.middleware)
             .concat(couponSlice.middleware)
+            .concat(orderSlice.middleware)
 
 })
 

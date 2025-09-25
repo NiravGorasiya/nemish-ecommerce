@@ -14,36 +14,38 @@ import WishlistModal from "../../components/ecommerce/WishlistModal";
 import Layout from "../../components/layout/Layout";
 import { fetchProduct } from "../../redux/action/product";
 import Link from "next/link";
+import { useGetProductsQuery } from "../../redux/reducer/productSlice";
 
 const Products = ({ products, productFilters, fetchProduct }) => {
+    const { data } = useGetProductsQuery();
     let Router = useRouter(),
         searchTerm = Router.query.search,
         showLimit = 12,
         showPagination = 4;
-
+  const product = data?.info?.rows;
     let [pagination, setPagination] = useState([]);
     let [limit, setLimit] = useState(showLimit);
-    let [pages, setPages] = useState(Math.ceil(products.items.length / limit));
+    let [pages, setPages] = useState(Math.ceil(product?.length / limit));
     let [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        fetchProduct(searchTerm, "/static/product.json", productFilters);
+        // fetchProduct(searchTerm, "/static/product.json", productFilters);
         cratePagination();
-    }, [productFilters, limit, pages, products.items.length]);
+    }, [productFilters, limit, pages, product?.length]);
 
     const cratePagination = () => {
         // set pagination
-        let arr = new Array(Math.ceil(products.items.length / limit))
-            .fill()
-            .map((_, idx) => idx + 1);
+        // let arr = new Array(Math.ceil(product.length / limit))
+        //     .fill()
+        //     .map((_, idx) => idx + 1);
 
-        setPagination(arr);
-        setPages(Math.ceil(products.items.length / limit));
+        // setPagination(arr);
+        // setPages(Math.ceil(product.length / limit));
     };
 
     const startIndex = currentPage * limit - limit;
     const endIndex = startIndex + limit;
-    const getPaginatedProducts = products.items.slice(startIndex, endIndex);
+    const getPaginatedProducts = product?.slice(startIndex, endIndex);
 
     let start = Math.floor((currentPage - 1) / showPagination) * showPagination;
     let end = start + showPagination;
@@ -64,7 +66,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
     const selectChange = (e) => {
         setLimit(Number(e.target.value));
         setCurrentPage(1);
-        setPages(Math.ceil(products.items.length / Number(e.target.value)));
+        setPages(Math.ceil(product.length / Number(e.target.value)));
     };
     return (
         <>
@@ -114,7 +116,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                                 <div className="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
                                     <div className="widget-header position-relative mb-20 pb-10">
                                         <h5 className="widget-title mb-10">
-                                            New products
+                                            New product
                                         </h5>
                                         <div className="bt-1 border-color-1"></div>
                                     </div>
@@ -196,7 +198,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                                             Save 17% on <br />
                                             Office Dress
                                         </h4>
-                                        <Link href="/products">
+                                        <Link href="/product">
                                             <a>
                                                 Shop Now
                                                 <i className="fi-rs-arrow-right"></i>
@@ -211,7 +213,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                                         <p>
                                             We found
                                             <strong className="text-brand">
-                                                {products.items.length}
+                                                {product?.length}
                                             </strong>
                                             items for you!
                                         </p>
@@ -229,11 +231,11 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                                     </div>
                                 </div>
                                 <div className="row product-grid-3">
-                                    {getPaginatedProducts.length === 0 && (
+                                    {getPaginatedProducts?.length === 0 && (
                                         <h3>No Products Found </h3>
                                     )}
 
-                                    {getPaginatedProducts.map((item, i) => (
+                                    {getPaginatedProducts?.map((item, i) => (
                                         <div
                                             className="col-lg-4 col-md-4 col-12 col-sm-6"
                                             key={i}
@@ -272,7 +274,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
 };
 
 const mapStateToProps = (state) => ({
-    products: state.products,
+    product: state.product,
     productFilters: state.productFilters,
 });
 

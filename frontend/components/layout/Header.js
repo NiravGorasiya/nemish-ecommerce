@@ -953,33 +953,9 @@ const Header = ({
                                                 </Link>
                                                 <ul className="sub-menu">
                                                     <li>
-                                                        <Link href="/products/shop-grid-right">
-                                                            <a>
-                                                                Shop Grid –
-                                                                Right Sidebar
-                                                            </a>
-                                                        </Link>
-                                                    </li>
-                                                    <li>
                                                         <Link href="/products/">
                                                             <a>
                                                                 Shop Grid – Left
-                                                                Sidebar
-                                                            </a>
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/products/shop-list-right">
-                                                            <a>
-                                                                Shop List –
-                                                                Right Sidebar
-                                                            </a>
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/products/shop-list-left">
-                                                            <a>
-                                                                Shop List – Left
                                                                 Sidebar
                                                             </a>
                                                         </Link>

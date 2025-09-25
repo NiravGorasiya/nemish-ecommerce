@@ -19,7 +19,7 @@ const BrandFilter = ({ updateProductFilters }) => {
             brand: selectedBrands,
         };
 
-        updateProductFilters(filters);
+        // updateProductFilters(filters);
     }, [selectedBrands]);
 
     const handleClick = (i, target) => {
@@ -49,12 +49,4 @@ const BrandFilter = ({ updateProductFilters }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    products: state.products.items,
-});
-
-const mapDidpatchToProps = {
-    updateProductFilters,
-};
-
-export default connect(mapStateToProps, mapDidpatchToProps)(BrandFilter);
+export default BrandFilter;

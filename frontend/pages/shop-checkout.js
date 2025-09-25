@@ -58,7 +58,7 @@ const Cart = () => {
         const orderResponse = await createOrder({ amount: subTotal }).unwrap();
         
         const options = {
-            key: 'rzp_test_cZQfBdqqN9hQhH',
+            key: 'rzp_test_RFUEjeFoaGM6cf',
             amount: subTotal * 100,
             currency: orderResponse.info.currency,
             name: 'your company name',
@@ -711,7 +711,7 @@ const Cart = () => {
                                                 {cartItem && cartItem.map((item, i) => (
                                                     <tr key={i}>
                                                         <td className="image product-thumbnail">
-                                                            <img src={`http://localhost:3001/uploads/${item?.Products?.colours?.[0]?.images?.[0]?.imageUrl}`} />
+                                                            <img src={`http://localhost:5000/uploads/${item?.Products?.colours?.[0]?.images?.[0]?.imageUrl}`} />
                                                         </td>
                                                         <td>
                                                             <h5>

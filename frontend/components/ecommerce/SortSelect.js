@@ -14,7 +14,7 @@ const SortSelect = ({ updateProductFilters }) => {
             featured,
         };
 
-        updateProductFilters(filters);
+        // updateProductFilters(filters);
     }, [searchTerm, featured]);
 
     const seleceOption = (e) => {
@@ -44,12 +44,4 @@ const SortSelect = ({ updateProductFilters }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    products: state.products.items,
-});
-
-const mapDidpatchToProps = {
-    updateProductFilters,
-};
-
-export default connect(mapStateToProps, mapDidpatchToProps)(SortSelect);
+export default SortSelect;

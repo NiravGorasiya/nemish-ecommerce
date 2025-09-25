@@ -44,7 +44,7 @@ const PriceRangeSlider = ({ updateProductFilters }) => {
 };
 
 const mapStateToProps = (state) => ({
-    products: state.products.items,
+    products: state.products,
 });
 
 const mapDidpatchToProps = {

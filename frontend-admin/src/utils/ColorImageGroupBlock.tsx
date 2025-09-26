@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 export interface ImageWithPreview {
-  file: File;
-  preview: string;
+  id?: string;        // DB id if it exists
+  file?: File;        // File only for newly uploaded images
+  preview: string;    // either URL from DB or object URL
+  isNew?: boolean;    // true if it's a freshly dropped file
 }
 
 export interface ColorImageGroup {
@@ -38,10 +40,14 @@ const ColorImageGroupBlock: React.FC<Props> = ({
     },
   });
 
-  // Cleanup previews on unmount
+  // Cleanup only for object URLs created from File
   useEffect(() => {
     return () => {
-      colorImage.images.forEach((img) => URL.revokeObjectURL(img.preview));
+      colorImage.images.forEach((img) => {
+        if (img.isNew && img.preview.startsWith("blob:")) {
+          URL.revokeObjectURL(img.preview);
+        }
+      });
     };
   }, [colorImage.images]);
 
@@ -64,14 +70,24 @@ const ColorImageGroupBlock: React.FC<Props> = ({
         </div>
 
         <div className="col-md-4">
-          <div {...getRootProps()} className="form-control text-center" style={{ cursor: "pointer" }}>
+          <div
+            {...getRootProps()}
+            className="form-control text-center"
+            style={{ cursor: "pointer" }}
+          >
             <input {...getInputProps()} />
-            {colorImage.images.length ? "Add More Images" : "Click or Drop Images"}
+            {colorImage.images.length
+              ? "Add More Images"
+              : "Click or Drop Images"}
           </div>
         </div>
 
-        <div className="col-md-2">
-          <button className="btn btn-danger" type="button" onClick={() => onRemoveColorGroup(index)}>
+        <div className="col-md-4">
+          <button
+            className="btn btn-danger"
+            type="button"
+            onClick={() => onRemoveColorGroup(index)}
+          >
             Remove Color
           </button>
         </div>
@@ -80,7 +96,7 @@ const ColorImageGroupBlock: React.FC<Props> = ({
       {colorImage.images.length > 0 && (
         <div className="d-flex flex-wrap gap-2 mt-3">
           {colorImage.images.map((img, imgIndex) => (
-            <div key={imgIndex} style={{ position: "relative" }}>
+            <div key={img.id || imgIndex} style={{ position: "relative" }}>
               <img
                 src={img.preview}
                 alt="Preview"

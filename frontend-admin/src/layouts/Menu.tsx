@@ -22,8 +22,6 @@ const Menu: React.FC<MenuComponentProps> = ({ menuItems }) => {
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
     const { pathname } = useLocation();
 
-    console.log(pathname, 'pathname');
-
     const handleSubMenuToggle = (menuTitle: string) => {
         if (activeSubMenu === menuTitle) {
             setActiveSubMenu(null);

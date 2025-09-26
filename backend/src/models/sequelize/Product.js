@@ -43,7 +43,7 @@ try {
                         allowNull: true
                     },
                     SKU: {
-                        type: DataTypes.INTEGER,
+                        type: DataTypes.STRING,
                         allowNull: false
                     },
                     price: {

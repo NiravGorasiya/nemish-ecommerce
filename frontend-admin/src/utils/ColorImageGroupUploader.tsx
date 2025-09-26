@@ -1,5 +1,8 @@
 import React from "react";
-import ColorImageGroupBlock, { ColorImageGroup, ImageWithPreview } from "./ColorImageGroupBlock";
+import ColorImageGroupBlock, {
+  ColorImageGroup,
+  ImageWithPreview,
+} from "./ColorImageGroupBlock";
 
 interface Props {
   colorImages: ColorImageGroup[];
@@ -14,42 +17,60 @@ const ColorImageGroupDropzone: React.FC<Props> = ({
 }) => {
   const addColorGroup = () => {
     setColorImages([...colorImages, { colorId: "", images: [] }]);
-  };
+  };  
 
   const handleChangeColor = (index: number, colorId: string) => {
-    const updated = [...colorImages];
-    updated[index].colorId = colorId;
-    setColorImages(updated);
+    setColorImages(
+      colorImages.map((group, i) =>
+        i === index ? { ...group, colorId } : group
+      )
+    );
   };
 
   const handleDropImages = (index: number, files: File[]) => {
-    const updated = [...colorImages];
     const newImages: ImageWithPreview[] = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-    updated[index].images.push(...newImages);
-    setColorImages(updated);
+
+    setColorImages(
+      colorImages.map((group, i) =>
+        i === index
+          ? { ...group, images: [...group.images, ...newImages] }
+          : group
+      )
+    );
   };
 
   const handleRemoveImage = (groupIndex: number, imageIndex: number) => {
-    const updated = [...colorImages];
-    const img = updated[groupIndex].images[imageIndex];
-    if (img?.preview) URL.revokeObjectURL(img.preview);
-    updated[groupIndex].images.splice(imageIndex, 1);
-    setColorImages(updated);
+    const updatedGroup = {
+      ...colorImages[groupIndex],
+      images: colorImages[groupIndex].images.filter((_, i) => i !== imageIndex),
+    };
+
+    const removed = colorImages[groupIndex].images[imageIndex];
+    if (removed?.preview) URL.revokeObjectURL(removed.preview);
+
+    setColorImages(
+      colorImages.map((group, i) => (i === groupIndex ? updatedGroup : group))
+    );
   };
 
   const handleRemoveColorGroup = (index: number) => {
-    const updated = [...colorImages];
-    updated[index].images.forEach((img) => URL.revokeObjectURL(img.preview));
-    updated.splice(index, 1);
-    setColorImages(updated);
+    colorImages[index].images.forEach((img) => {
+      if (img?.preview) URL.revokeObjectURL(img.preview);
+    });
+
+    setColorImages(colorImages.filter((_, i) => i !== index));
   };
 
   return (
     <div>
-      <button className="btn btn-sm btn-primary mb-3" type="button" onClick={addColorGroup}>
+      <button
+        className="btn btn-sm btn-primary mb-3 mt-3"
+        type="button"
+        onClick={addColorGroup}
+      >
         + Add Color Group
       </button>
 

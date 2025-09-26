@@ -92,6 +92,8 @@ const Product: React.FC = () => {
   useEffect(() => {
     if (productDetail?.info) {
       const p = productDetail.info;
+      console.log(p, " p ---");
+
       setInitialValues({
         name: p.name || "",
         title: p.title || "",
@@ -103,8 +105,8 @@ const Product: React.FC = () => {
         subcategoryId: p.subcategoryId || "",
         categoryId: p.categoryId || "",
         SKU: p.SKU || "",
-        size_id: p.size_id || [],
-        colorImages: p.colorImages || [],
+        size_id: p.sizes || [],
+        colorImages: p.colors || [],
       });
     }
   }, [productDetail]);
@@ -113,6 +115,8 @@ const Product: React.FC = () => {
     values: FormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
+    console.log(values.size_id, "values size_id");
+
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("title", values.title);
@@ -124,9 +128,7 @@ const Product: React.FC = () => {
     formData.append("categoryId", values.categoryId);
     formData.append("stockStatus", values.stockStatus);
 
-    values.size_id.forEach((sizeId) => {
-      formData.append("size_id[]", sizeId);
-    });
+    formData.append("size_id", JSON.stringify(values.size_id));
 
     values.colorImages.forEach(({ colorId, images }) => {
       images.forEach((imgObj) => {
@@ -157,7 +159,7 @@ const Product: React.FC = () => {
         <Header />
         <section className="content-main">
           <Formik
-          enableReinitialize 
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onsubmit}
@@ -353,19 +355,6 @@ const Product: React.FC = () => {
                           </div>
                         </div>
                       </div>
-
-                      <ColorImageGroupUploader
-                        colorImages={values.colorImages}
-                        setColorImages={(val) =>
-                          setFieldValue("colorImages", val)
-                        }
-                        availableColors={
-                          colorsDatas?.map((color) => ({
-                            id: color.Id.toString(),
-                            name: color.name,
-                          })) || []
-                        }
-                      />
                     </div>
                     <div className="col-lg-4">
                       <div className="card">
@@ -429,6 +418,23 @@ const Product: React.FC = () => {
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div className="col-lg-6 card">
+                      <ColorImageGroupUploader
+                        colorImages={values.colorImages}
+                        setColorImages={(val) =>
+                          setFieldValue("colorImages", val)
+                        }
+                        availableColors={
+                          colorsDatas?.map((color) => ({
+                            id: color.Id.toString(),
+                            name: color.name,
+                          })) || []
+                        }
+                      />
+                    </div>
+                    <div className="col-lg-6 card">
+                      
                     </div>
                   </div>
                 </Form>

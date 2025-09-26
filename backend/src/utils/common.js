@@ -1,9 +1,9 @@
 const crypto = require("crypto");
 
-function generateSKU(prefix = "SKU") {
+function generateSKU() {
   const randomPart = crypto.randomBytes(3).toString("hex").toUpperCase(); 
   const timestampPart = Date.now().toString().slice(-6);
-  return `${prefix}-${timestampPart}-${randomPart}`;
+  return `${timestampPart}-${randomPart}`;
 }
 
 module.exports ={generateSKU}

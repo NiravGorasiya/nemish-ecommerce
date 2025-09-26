@@ -50,11 +50,7 @@ module.exports = {
       .withMessage("Final Price should be a valid number"),
     body("size_id")
       .exists()
-      .withMessage("Size ID is required")
-      .isArray()
-      .withMessage("Size ID should be an array")
-      .notEmpty()
-      .withMessage("Size ID cannot be empty"),
+      .withMessage("Size ID is required"),
     body("color_id")
       .exists()
       .withMessage("Color ID is required")

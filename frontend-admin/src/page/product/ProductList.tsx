@@ -44,16 +44,16 @@ const ProductList = () => {
                     <div className="card mb-4">
                         <header className="card-header">
                             <Row className="align-items-center py-2">
-                                <Col lg={3} sm={4} xs={8} className="me-auto mb-md-0 mb-3">
-                                    Product name
+                                 <Col lg={2} sm={4} xs={8} className="me-auto mb-md-0 mb-3 text-center">
+                                    SKU
                                 </Col>
-                                <Col lg={2} sm={2} xs={4} className="me-auto mb-md-0 mb-3">
-                                    Sku
+                                <Col lg={2} sm={4} xs={8} className="me-auto mb-md-0 mb-3">
+                                    Product name
                                 </Col>
                                 <Col lg={2} sm={2} xs={4}>
                                     Price
                                 </Col>
-                                <Col lg={3} sm={2} xs={4}>
+                                <Col lg={1} sm={2} xs={4}>
                                     status
                                 </Col>
                                 <Col lg={2} sm={2} xs={4}>
@@ -65,16 +65,16 @@ const ProductList = () => {
                             {products?.map((product: any, index: number) => (
                                 <article className="itemlist">
                                     <Row key={index} className="align-items-center">
-                                        <Col lg={3} sm={4} xs={8} className="flex-grow-1 col-name">
-                                            <h6 className="mb-0">{product.name}</h6>
+                                        <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
+                                            <h6 className="mb-0">{product.SKU}</h6>
                                         </Col>
-                                        <Col lg={2} sm={2} xs={4} className="col-date">
-                                            <span>{product.SKU}</span>
+                                        <Col lg={2} sm={4} xs={8} className="flex-grow-1 col-name">
+                                            <h6 className="mb-0">{product.name}</h6>
                                         </Col>
                                         <Col lg={2} sm={2} xs={4} className="col-date">
                                             <span>{product.final_price}</span>
                                         </Col>
-                                        <Col lg={2} sm={2} xs={4} className="col-date">
+                                        <Col lg={1} sm={2} xs={4} className="col-date">
                                             <span>{product.status}</span>
                                         </Col>
                                         <Col lg={3} sm={2} xs={4} className="col-action text-end">

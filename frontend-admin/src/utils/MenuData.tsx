@@ -60,4 +60,9 @@ export const menuItems: MenuItem[] = [
     icon: "shopping_cart",
     link: "/order",
   },
+  {
+    title: "Banners",
+    icon: "shopping_cart",
+    link: "/banner",
+  }
 ];

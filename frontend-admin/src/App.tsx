@@ -21,6 +21,7 @@ import Attribute from "./page/Attribute";
 import Coupon from "./page/Coupon";
 import Order from "./page/order/Order";
 import OrderDetail from "./page/order/OrderDetails";
+import Banner from "./page/Banner";
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ const App: React.FC = () => {
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/category" element={<Category />} />
             <Route path="/productadd" element={<Product />} />
+            <Route path="/banner" element={<Banner />} />
             <Route path="/customer" element={<Customer />} />
             <Route path="/product" element={<ProductList />} />
             <Route path="/product/edit/:id" element={<Product />} />

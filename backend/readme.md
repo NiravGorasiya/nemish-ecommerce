@@ -1,45 +1,3 @@
-For a complete E-commerce website, you will need multiple APIs to handle different functionalities. Below is a detailed list of essential APIs categorized by their purpose:
-
-1. Authentication & User Management
-User Registration API (POST /api/auth/register)
-User Login API (POST /api/auth/login)
-User Logout API (POST /api/auth/logout)
-User Profile API (GET /api/user/profile)
-Update Profile API (PUT /api/user/update)
-Change Password API (POST /api/user/change-password)
-Forgot Password API (POST /api/auth/forgot-password)
-Reset Password API (POST /api/auth/reset-password)
-4. Cart Management
-Add to Cart API (POST /api/cart/add)
-Get Cart Items API (GET /api/cart)
-Update Cart Item API (PUT /api/cart/update/:id)
-Remove Cart Item API (DELETE /api/cart/remove/:id)
-Clear Cart API (DELETE /api/cart/clear)
-3. Categories & Subcategories
-Get All Categories API (GET /api/categories)
-Get Single Category API (GET /api/categories/:id)
-Add New Category API (POST /api/categories)
-Update Category API (PUT /api/categories/:id)
-Delete Category API (DELETE /api/categories/:id)
-5. Wishlist
-Add to Wishlist API (POST /api/wishlist/add)
-Get Wishlist API (GET /api/wishlist)
-Remove from Wishlist API (DELETE /api/wishlist/:id)
-2. Product Management
-Get All Products API (GET /api/products)
-Get Single Product API (GET /api/products/:id)
-Add New Product API (POST /api/products)
-Update Product API (PUT /api/products/:id)
-Delete Product API (DELETE /api/products/:id)
-Search Product API (GET /api/products/search?q=keyword)
-Filter Products API (GET /api/products/filter?category=shoes&price=100-500)
-
-6. Orders & Checkout
-Place Order API (POST /api/orders)
-Get User Orders API (GET /api/orders)
-Get Order Details API (GET /api/orders/:id)
-Cancel Order API (PUT /api/orders/cancel/:id)
-Track Order API (GET /api/orders/track/:id)
 7. Payment APIs
 Initiate Payment API (POST /api/payments/initiate)
 Verify Payment API (POST /api/payments/verify)
@@ -83,8 +41,19 @@ Get Site Settings API (GET /api/settings)
 Summary
 
 
+1) logout functionality:- User Logout API (POST /api/auth/logout)
 
+2) User Profile API (GET /api/user/profile)
+3) Update Profile API (PUT /api/user/update)
+4) Change Password API (POST /api/user/change-password)
+5) Forgot Password API (POST /api/auth/forgot-password)
+6) Reset Password API (POST /api/auth/reset-password)
+7) Clear Cart API (DELETE /api/cart/clear)
 
-
-
-
+8) Get All Products API (GET /api/products)
+9) Get Single Product API (GET /api/products/:id)
+10) Add New Product API (POST /api/products)
+11) Update Product API (PUT /api/products/:id)
+12) Delete Product API (DELETE /api/products/:id)
+13) Search Product API (GET /api/products/search?q=keyword)
+14) Filter Products API (GET /api/products/filter?category=shoes&price=100-500)

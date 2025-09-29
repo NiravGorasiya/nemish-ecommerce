@@ -273,15 +273,5 @@ const Products = ({ products, productFilters, fetchProduct }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    product: state.product,
-    productFilters: state.productFilters,
-});
-
-const mapDidpatchToProps = {
-    // openCart,
-    fetchProduct,
-    // fetchMoreProduct,
-};
 
 export default Products;

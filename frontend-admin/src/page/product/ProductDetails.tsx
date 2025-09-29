@@ -12,32 +12,27 @@ const ProductDetails = () => {
   const numericId: any = id ? parseInt(id, 10) : undefined;
 
   const { data }: any = useGetProductDetailQuery(numericId);
-
   const productDetails = data?.info;
 
-  const getImageUrls = (images: string[]) =>
+  const getImageUrls = (images: any[]) =>
     images.map((img) => ({
-      original: img,
-      thumbnail: img,
-      description: "Image",
+      original: img.preview,
+      thumbnail: img.preview,
     }));
 
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<any>(null);
   const [sliderImages, setSliderImages] = useState<any[]>([]);
 
   useEffect(() => {
-    if (productDetails?.colors) {
-      const defaultColor = Object.keys(productDetails.colors)[0];
-      setSelectedColor(defaultColor);
-      const images = getImageUrls(productDetails.colors[defaultColor]);
-      setSliderImages(images);
+    if (productDetails?.colors?.length > 0) {
+      setSelectedColor(productDetails.colors[0]);
+      setSliderImages(getImageUrls(productDetails.colors[0].images));
     }
   }, [productDetails]);
 
-  const handleColorClick = (color: string): void => {
+  const handleColorClick = (color: any): void => {
     setSelectedColor(color);
-    const images = getImageUrls(productDetails.colors[color] || []);
-    setSliderImages(images);
+    setSliderImages(getImageUrls(color.images));
   };
 
   return (
@@ -50,7 +45,7 @@ const ProductDetails = () => {
             <h2 className="content-title card-title">Product Details</h2>
           </div>
 
-          <div className="container-fulild mt-4">
+          <div className="container-fluid mt-4">
             <div className="row align-items-start">
               <div className="col-md-5">
                 {sliderImages.length > 0 ? (
@@ -62,49 +57,83 @@ const ProductDetails = () => {
 
               <div className="col-md-6">
                 <h2>{productDetails?.title}</h2>
+
                 <div className="product-price mb-3">
-                  <h4 className="text-success">₹{productDetails?.price}</h4>
-                  <h6 className="text-muted text-decoration-line-through">
-                    ₹{productDetails?.oldPrice}
-                  </h6>
-                  <span className="badge bg-success">
-                    {productDetails?.discount}% Off
-                  </span>
+                  <h4 className="text-success">₹{productDetails?.finalPrice}</h4>
+                  {productDetails?.finalPrice !== productDetails?.price && (
+                    <>
+                      <h6 className="text-muted text-decoration-line-through">
+                        ₹{productDetails?.price}
+                      </h6>
+                      <span className="badge bg-success">
+                        {Math.round(
+                          ((productDetails?.price - productDetails?.finalPrice) /
+                            productDetails?.price) *
+                            100
+                        )}
+                        % Off
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 <p>{productDetails?.description}</p>
 
                 <div className="mb-3">
                   <strong>Size: </strong>
-                  {productDetails?.sizes.map((size: any, index: number) => (
-                    <button
-                      key={index}
-                      className="btn btn-outline-primary btn-sm mx-1"
-                    >
-                      {size.name}
-                    </button>
-                  ))}
+                  {productDetails?.sizes?.length > 0 ? (
+                    productDetails.sizes.map((size: any, index: number) => (
+                      <button
+                        key={index}
+                        className="btn btn-outline-primary btn-sm mx-1"
+                      >
+                        {size.name}
+                      </button>
+                    ))
+                  ) : (
+                    <span className="text-muted">No sizes available</span>
+                  )}
                 </div>
 
                 <div className="mb-3">
                   <strong>Color: </strong>
-                  {productDetails &&
-                    Object.keys(productDetails.colors).map((color, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleColorClick(color)}
-                        className={`btn btn-outline-secondary btn-sm mx-1 ${
-                          selectedColor === color ? "border border-dark" : ""
-                        }`}
-                        style={{
-                          backgroundColor: color,
-                          color: "white",
-                          borderRadius: "50%",
-                          width: "30px",
-                          height: "30px",
-                        }}
-                      ></button>
-                    ))}
+                  {productDetails?.colors?.map((color: any, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => handleColorClick(color)}
+                      className={`btn btn-outline-secondary btn-sm mx-1 ${
+                        selectedColor?.name === color.name
+                          ? "border border-dark"
+                          : ""
+                      }`}
+                      style={{
+                        backgroundColor: color.name.toLowerCase(),
+                        color: "white",
+                        borderRadius: "50%",
+                        width: "30px",
+                        height: "30px",
+                      }}
+                      title={color.name}
+                    ></button>
+                  ))}
+                </div>
+
+                <div className="mb-3">
+                  <strong>Stock: </strong>
+                  <span
+                    className={
+                      productDetails?.stockStatus === "in_stock"
+                        ? "text-success"
+                        : "text-danger"
+                    }
+                  >
+                    {productDetails?.stockStatus} ({productDetails?.stockQuantity} available)
+                  </span>
+                </div>
+
+                <div className="mb-3">
+                  <strong>SKU: </strong>
+                  {productDetails?.SKU}
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
@@ -58,6 +58,7 @@ const validationSchema = Yup.object({
 });
 
 const Product: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const numericId: any = id ? parseInt(id, 10) : undefined;
   const { data: productDetail }: any = useGetProductDetailQuery(numericId);
@@ -66,6 +67,7 @@ const Product: React.FC = () => {
 
   const { data } = useGetSubCategoryQuery({});
   const { data: category } = useGetCategoriesQuery();
+
   const { data: colorData } = useGetColourQuery();
 
   const [createProduct] = useCreateProductMutation();
@@ -92,8 +94,6 @@ const Product: React.FC = () => {
   useEffect(() => {
     if (productDetail?.info) {
       const p = productDetail.info;
-      console.log(p, " p ---");
-
       setInitialValues({
         name: p.name || "",
         title: p.title || "",
@@ -140,8 +140,10 @@ const Product: React.FC = () => {
     try {
       if (isEditMode) {
         await updateProduct({ id: numericId, body: formData }).unwrap();
+        navigate("/product");
       } else {
         await createProduct(formData).unwrap();
+        navigate("/product");
       }
     } catch (err: any) {
       if (err.status) {
@@ -433,9 +435,7 @@ const Product: React.FC = () => {
                         }
                       />
                     </div>
-                    <div className="col-lg-6 card">
-                      
-                    </div>
+                    <div className="col-lg-6 card"></div>
                   </div>
                 </Form>
               );

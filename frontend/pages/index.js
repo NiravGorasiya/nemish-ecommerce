@@ -1,15 +1,12 @@
 import FeatchTab from "../components/ecommerce/fetchTab";
 import FeatchTab2 from "../components/ecommerce/fetchTabSlider";
+import Product from "../components/ecommerce/Product";
 import Banner2 from "../components/elements/Banner2";
-import Bottom from "../components/elements/Bottom";
 import QuickView from "./../components/ecommerce/QuickView";
-import Banner3 from "./../components/elements/Banner3";
-import Banner4 from "./../components/elements/Banner4";
 import Banner5 from "./../components/elements/Banner5";
 import BannerFeatures from "./../components/elements/BannerFeatures";
 import Deals1 from "./../components/elements/Deals1";
 import Deals2 from "./../components/elements/Deals2";
-import HomeBlog from "./../components/elements/HomeBlog";
 import IntroPopup from "./../components/elements/IntroPopup";
 import Layout from "./../components/layout/Layout";
 import BrandSlider from "./../components/sliders/Brand";
@@ -44,11 +41,11 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="banner-2 section-padding pb-0">
+                {/* <section className="banner-2 section-padding pb-0">
                     <div className="container">
                         <Banner2 />
                     </div>
-                </section>
+                </section> */}
 
                 <section className="popular-categories section-padding mt-15 mb-25">
                     <div className="container wow fadeIn animated">
@@ -69,12 +66,12 @@ export default function Home() {
                 <section className="banners mb-15">
                     <div className="container">
                         <div className="row">
-                            <Banner5 />
+                            <Product/>
                         </div>
                     </div>
                 </section>
 
-                <section className="section-padding">
+{/*                 <section className="section-padding">
                     <div className="container wow fadeIn animated">
                         <h3 className="section-title mb-20">
                             <span>New</span> Arrivals
@@ -113,38 +110,7 @@ export default function Home() {
                     <div className="container pt-25 pb-25">
                         <FeatchTab2 />
                     </div>
-                </section>
-
-                <section className="section-padding">
-                    <div className="container pt-25 pb-20">
-                        <div className="row">
-                            <div className="col-lg-6">
-                                <h3 className="section-title mb-20">
-                                    <span>From</span> blog
-                                </h3>
-                                <HomeBlog />
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="row">
-                                    <Banner3 />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="mb-50">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <Banner4 />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <Bottom/>
-
+                </section> */}
                 <QuickView />
             </Layout>
         </>

@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export interface category {
     Id: number;
     name: string;
+    image?: string;
     createdAt: Date
     updatedAt: Date
 }
@@ -25,21 +26,21 @@ export const categorySlice = createApi({
             query: () => "/all",
             providesTags: ['Category'],
         }),
-        createCategory: builder.mutation<category, Partial<category>>({
-            query: (body) => ({
+        createCategory: builder.mutation<category, FormData>({
+            query: (formData) => ({
                 url: '/add',
                 method: "POST",
-                body,
+                body: formData,
             }),
             invalidatesTags: ['Category']
         }),
-        updateCategory: builder.mutation<category, Partial<category>>({
-            query: ({ Id, ...body }) => ({
-                url: `/update/${Id}`,
+        updateCategory: builder.mutation<category, { id: number; formData: FormData }>({
+            query: ({ id, formData }) => ({
+                url: `/update/${id}`,
                 method: "PUT",
-                body,
+                body: formData,
             }),
-            invalidatesTags: (result, error, { Id }) => [{ type: "Category", Id }],
+            invalidatesTags: (result, error, { id }) => [{ type: "Category", id }],
         }),
         getCategoryById: builder.query<category, string>({
             query: (id) => `/${id}`,
@@ -55,4 +56,4 @@ export const categorySlice = createApi({
     })
 })
 
-export const { useGetCategoriesQuery, useDeleteCategoryMutation, useCreateCategoryMutation,useUpdateCategoryMutation} = categorySlice;
+export const { useGetCategoriesQuery, useDeleteCategoryMutation, useCreateCategoryMutation, useUpdateCategoryMutation } = categorySlice;

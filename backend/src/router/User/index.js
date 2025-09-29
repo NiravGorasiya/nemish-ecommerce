@@ -16,4 +16,6 @@ module.exports = Router()
   .use("/userproduct", ProductRouter)
   .use("/shippingaddress", ShippingRouterRouter)
   .use("/customer", CustomerRouter)
+  .use("/customer", CustomerRouter)
+
 

@@ -1,14 +1,17 @@
 const { findModelItemsQ } = require("../../queries/generic");
 
-const categoryCtrl = async () => {
-  const category = await findModelItemsQ(
-    "Category",
+const categoryAllCtrl = async () => {
+  const categories = await findModelItemsQ(
+    "Categories",
     {},
-    { offset, limit, order: [["createdAt", "DESC"]], raw: true }
+    {
+      order: [["createdAt", "DESC"]],
+      raw: true,
+    }
   );
-  return category;
+  return categories;
 };
 
 module.exports = {
-  categoryCtrl,
+  categoryAllCtrl,
 };

@@ -23,7 +23,7 @@ ProductId.getInitialProps = async (params) => {
 
   try {
     const productData = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/userproduct/${id}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/userproduct/${id}`
     );
 
     return { product: productData.data.info };

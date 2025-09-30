@@ -39,8 +39,6 @@ Get All FAQs API (GET /api/faqs)
 Upload Image API (POST /api/upload/image)
 Get Site Settings API (GET /api/settings)
 Summary
-
-
 1) logout functionality:- User Logout API (POST /api/auth/logout)
 
 2) User Profile API (GET /api/user/profile)

@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import BrandFilter from "../../components/ecommerce/BrandFilter";
 import CategoryProduct from "../../components/ecommerce/CategoryProduct";
 import Pagination from "../../components/ecommerce/Pagination";
@@ -11,10 +10,9 @@ import SingleProduct from "../../components/ecommerce/SingleProduct";
 import SizeFilter from "../../components/ecommerce/SizeFilter";
 import SortSelect from "../../components/ecommerce/SortSelect";
 import WishlistModal from "../../components/ecommerce/WishlistModal";
-import Layout from "../../components/layout/Layout";
-import { fetchProduct } from "../../redux/action/product";
-import Link from "next/link";
+import { useGetSubCategoriesQuery } from "../../redux/reducer/subCategorySlice";
 import { useGetProductsQuery } from "../../redux/reducer/productSlice";
+import SingleProductList from "./SingleProductList";
 
 const Product = ({ products, productFilters, fetchProduct }) => {
   const { data } = useGetProductsQuery();

@@ -91,7 +91,10 @@ const Banner: React.FC = () => {
     setPopupVisible(true);
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
     await deleteBanner(id);
     refetch();
   };
@@ -171,20 +174,22 @@ const Banner: React.FC = () => {
                         {banner.status}
                       </span>
                     </Col>
-                    <Col md={2} className="text-end">
+                    <Col lg={2} sm={2} xs={4} className="col-action text-end">
                       <Button
+                        variant="brand"
                         size="sm"
-                        className="btn btn-warning mx-1"
+                        className="font-sm rounded mx-1"
                         onClick={() => handleEdit(banner)}
                       >
-                        Edit
+                        <i className="material-icons md-edit"></i> Edit
                       </Button>
                       <Button
+                        variant="light"
                         size="sm"
-                        className="btn btn-danger mx-1"
-                        onClick={() => handleDelete(banner.Id)}
+                        className="font-sm rounded mx-1"
+                        onClick={(event) => handleDelete(event, banner.Id)}
                       >
-                        Delete
+                        <i className="material-icons md-delete_forever"></i> Delete
                       </Button>
                     </Col>
                   </Row>

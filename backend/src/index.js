@@ -19,7 +19,7 @@ require("./utils/razorpay")
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api", adminRoute);
-app.use("/api", userRoute);
+app.use("/api/user", userRoute);
 
 app.use(handleErrors);
 

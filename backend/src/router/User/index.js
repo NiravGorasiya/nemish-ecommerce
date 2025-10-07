@@ -9,6 +9,8 @@ const ProductRouter = require("./productRouter");
 const CustomerRouter = require("./customerRouter")
 const categoryRouter = require("./categoryRouter")
 const subCategoryRouter = require("./subCategoryRouter")
+const reviewRouter = require("./reviewRouter")
+const subscribeRouter = require("./subscribeRouter")
 
 module.exports = Router()
   .use("/", userRouter)
@@ -20,6 +22,10 @@ module.exports = Router()
   .use("/customer", CustomerRouter)
   .use("/category", categoryRouter)
   .use("/subcategory", subCategoryRouter)
+  .use("/review", reviewRouter)
+  .use("/subscribe", subscribeRouter)
+
+
 
 
 

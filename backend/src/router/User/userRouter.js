@@ -20,6 +20,7 @@ router.post("/signup", registerv, expressValidatorMw, async (req, res, next) => 
   try {
     const ctrlData = matchedData(req, { locations: ["body"] });
     await userSignupCtrl(ctrlData);
+console.log('✌️ctrlData --->', ctrlData);
     createResponse(req, res, "User created Successfully");
   } catch (error) {
     return next(error);

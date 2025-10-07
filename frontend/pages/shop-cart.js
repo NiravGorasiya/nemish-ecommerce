@@ -132,38 +132,6 @@ const Cart = () => {
                                 </div>
                                 <div className="row mb-50">
                                     <div className="col-lg-6 col-md-12">
-                                        <div className="heading_s1 mb-3">
-                                            <h4>Calculate Shipping</h4>
-                                        </div>
-                                        <p className="mt-15 mb-30">
-                                            Flat rate:
-                                            <span className="font-xl text-brand fw-900">5%</span>
-                                        </p>
-                                        <form className="field_form shipping_calculator">
-                                            <div className="form-row">
-                                                <div className="form-group col-lg-12">
-                                                    <div className="custom_select">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="form-row row">
-                                                <div className="form-group col-lg-6">
-                                                    <input required="required" placeholder="State / Country" name="name" type="text" />
-                                                </div>
-                                                <div className="form-group col-lg-6">
-                                                    <input required="required" placeholder="PostCode / ZIP" name="name" type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="form-row">
-                                                <div className="form-group col-lg-12">
-                                                    <button className="btn  btn-sm">
-                                                        <i className="fi-rs-shuffle mr-10"></i>
-                                                        Update
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
                                         <div className="mb-30 mt-50">
                                             <div className="heading_s1 mb-3">
                                                 <h4>Apply Coupon</h4>

@@ -1,14 +1,5 @@
-import Link from "next/link";
 import { useState } from "react";
-import { connect } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  addToCart,
-  decreaseQuantity,
-  increaseQuantity,
-} from "../../redux/action/cart";
-import { addToCompare } from "../../redux/action/compareAction";
-import { addToWishlist } from "../../redux/action/wishlistAction";
 import ProductTab from "../elements/ProductTab";
 
 const ProductDetails = ({
@@ -21,7 +12,7 @@ const ProductDetails = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(
-    Object.keys(product.colors)[0] 
+    Object.keys(product.colors)[0]
   );
   const [selectedSize, setSelectedSize] = useState(
     product.sizes?.[0]?.name || null
@@ -30,13 +21,21 @@ const ProductDetails = ({
     product.colors[selectedColor][0]
   );
 
+  const bootstrapColorMap = {
+    red: "danger",
+    blue: "primary",
+    green: "success",
+    yellow: "warning",
+    gray: "secondary",
+  };
+
   const handleCart = () => {
     addToCart({
       ...product,
       quantity,
       selectedColor,
       selectedSize,
-      image: activeImage, 
+      image: activeImage,
     });
     toast.success("Added to Cart!");
   };
@@ -65,6 +64,7 @@ const ProductDetails = ({
                         src={activeImage}
                         alt={product.title}
                         className="border rounded w-100"
+                        style={{ height: 600 }}
                       />
                     </div>
                     <div className="d-flex gap-2 mt-3">
@@ -95,21 +95,42 @@ const ProductDetails = ({
                     <div className="mb-3">
                       <strong>Color: </strong>
                       <div className="d-flex gap-2 mt-2">
-                        {Object.keys(product.colors).map((color, i) => (
-                          <button
-                            key={i}
-                            onClick={() => {
-                              setSelectedColor(color);
-                              setActiveImage(product.colors[color][0]);
-                            }}
-                            className={`px-3 py-1 border rounded ${
-                              selectedColor === color ? "bg-dark text-white" : ""
-                            }`}
-                          >
-                            {color}
-                          </button>
-                        ))}
+                        <div className="d-flex gap-2 mt-2">
+                          {Object.keys(product.colors).map((color, i) => {
+                            const bootstrapColor =
+                              bootstrapColorMap[color] || "secondary";
+
+                            return (
+                              <button
+                                key={i}
+                                onClick={() => {
+                                  setSelectedColor(color);
+                                  setActiveImage(product.colors[color][0]);
+                                }}
+                                className={`px-3 py-1 border rounded ${
+                                  selectedColor === color
+                                    ? `bg-${bootstrapColor} text-white`
+                                    : ""
+                                }`}
+                              >
+                                {color}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
+                      {/* <div className="attr-detail attr-color mb-15">
+                        <strong className="mr-10">Color</strong>
+                        <ul className="list-filter color-filter">
+                          {product.variations.map((clr, i) => (
+                            <li key={i}>
+                              <a href="#">
+                                <span className={`product-color-${clr}`}></span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div> */}
                     </div>
 
                     <div className="mb-3">
@@ -134,9 +155,7 @@ const ProductDetails = ({
                     <div className="d-flex align-items-center gap-3 mb-3">
                       <button
                         className="btn btn-outline-secondary"
-                        onClick={() =>
-                          setQuantity((q) => (q > 1 ? q - 1 : 1))
-                        }
+                        onClick={() => setQuantity((q) => (q > 1 ? q - 1 : 1))}
                       >
                         -
                       </button>
@@ -151,22 +170,29 @@ const ProductDetails = ({
 
                     <div className="d-flex gap-3">
                       <button
-                        className="btn btn-primary"
+                        className="button button-add-to-cart"
                         onClick={handleCart}
                       >
                         Add to Cart
                       </button>
+                      <a
+                        aria-label="Add To Wishlist"
+                        className="action-btn hover-up"
+                        onClick={(e) => handleWishlist(product)}
+                      >
+                        <i className="fi-rs-heart"></i>
+                      </a>
                       <button
-                        className="btn btn-outline-danger"
+                        className="action-btn hover-up"
                         onClick={handleWishlist}
                       >
-                        ❤️ Wishlist
+                        Wishlist
                       </button>
                       <button
                         className="btn btn-outline-secondary"
                         onClick={handleCompare}
                       >
-                        🔄 Compare
+                        Compare
                       </button>
                     </div>
                   </div>

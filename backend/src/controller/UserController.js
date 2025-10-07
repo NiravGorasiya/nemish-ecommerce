@@ -1,10 +1,17 @@
 const bcrypt = require("bcrypt");
 const sequelize = require("../models/sequelize/index");
-const { DataValidationError, UserNotFoundError, UnauthorizedError } = require("../errors/index");
+const {
+  DataValidationError,
+  UserNotFoundError,
+  UnauthorizedError,
+} = require("../errors/index");
 const { findUserByEmail, findUserById } = require("../queries/users/index");
-const { comparePasswords, encryptPassword } = require("../utils/passwordutility");
+const {
+  comparePasswords,
+  encryptPassword,
+} = require("../utils/passwordutility");
 const { signJWT } = require("../utils/jwtutils");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const { findModelItemQ, updateModelItemQ } = require("../queries/generic");
 const nodemailer = require("nodemailer");
 
@@ -34,6 +41,7 @@ const userSignupCtrl = async (ctrlData) => {
     await newUser.save();
     return newUser;
   } catch (error) {
+    console.log("✌️error --->", error);
     throw new Error(error.message);
   }
 };
@@ -43,7 +51,6 @@ const loginController = async ({ email, password }, next) => {
     let user = await findUserByEmail(email);
 
     if (user !== null) {
-
       const result = await comparePasswords(password, user.userPassword);
 
       if (result === true) {
@@ -67,7 +74,7 @@ const loginController = async ({ email, password }, next) => {
 
 const userProfileController = async (req) => {
   try {
-    const user = await findUserById(req.user.Id)
+    const user = await findUserById(req.user.Id);
     return user;
   } catch (e) {
     throw e;
@@ -78,24 +85,29 @@ const userChangePasswordController = async (req) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     if (newPassword !== confirmPassword) {
-      throw new DataValidationError("User new password and confirm password not match", [
-        {
-          msg: "Email Already Exists",
-          location: "body",
-          param: "email",
-        },
-      ]);
+      throw new DataValidationError(
+        "User new password and confirm password not match",
+        [
+          {
+            msg: "Email Already Exists",
+            location: "body",
+            param: "email",
+          },
+        ]
+      );
     }
 
-    const user = await findUserById(req.user.Id)
+    const user = await findUserById(req.user.Id);
     const result = await comparePasswords(currentPassword, user.userPassword);
 
     if (result === true) {
-
       const hashedPassword = await encryptPassword(newPassword);
 
-      await updateModelItemQ("Users", { userPassword: hashedPassword }, { Id: req.user.Id });
-
+      await updateModelItemQ(
+        "Users",
+        { userPassword: hashedPassword },
+        { Id: req.user.Id }
+      );
     } else {
       throw new UnauthorizedError();
     }
@@ -109,14 +121,15 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-})
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const userSendEmailController = async (data) => {
-
   try {
-    const user = await sequelize.models.Users.findOne({ where: { userEmail: data } });
+    const user = await sequelize.models.Users.findOne({
+      where: { userEmail: data },
+    });
 
     if (!user) {
       throw new UnauthorizedError("User not found");
@@ -135,9 +148,8 @@ const userSendEmailController = async (data) => {
       from: process.env.EMAIL_USER,
       to: user.userEmail,
       subject: "Password Reset Request",
-      text: `Click the link to reset your password: ${resetUrl}`
+      text: `Click the link to reset your password: ${resetUrl}`,
     });
-
   } catch (e) {
     throw e;
   }
@@ -146,17 +158,19 @@ const userSendEmailController = async (data) => {
 const userResetPasswordController = async (token, password) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await sequelize.models.Users.findOne({ where: { Id: decoded.id, resetToken: token } });
+    const user = await sequelize.models.Users.findOne({
+      where: { Id: decoded.id, resetToken: token },
+    });
 
-    if (!user) return res.status(400).json({ message: "Invalid or expired token" });
+    if (!user)
+      return res.status(400).json({ message: "Invalid or expired token" });
 
     const hashedPassword = await encryptPassword(password);
 
     await sequelize.models.Users.update(
       { userPassword: hashedPassword, resetToken: null },
       { where: { Id: user.Id } }
-    )
-
+    );
   } catch (e) {
     throw e;
   }
@@ -168,5 +182,5 @@ module.exports = {
   userProfileController,
   userChangePasswordController,
   userSendEmailController,
-  userResetPasswordController
+  userResetPasswordController,
 };

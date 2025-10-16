@@ -7,7 +7,7 @@ export const authSlice = createApi({
     endpoints: (builder) => ({
         loginUser: builder.mutation({
             query: (credential) => ({
-                url: '/register',
+                url: '/login',
                 method: 'POST',
                 body: credential
             })

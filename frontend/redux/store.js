@@ -7,6 +7,7 @@ import { orderSlice } from "./reducer/orderSlice";
 import { categorySlice } from "./reducer/categorySlice";
 import { subCategorySlice } from "./reducer/subCategorySlice";
 import { subScribeSlice } from "./reducer/subScribeSlice";
+import { productCompareSlice } from "./reducer/productCompareSlice";
 
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
     [categorySlice.reducerPath]: categorySlice.reducer,
     [subCategorySlice.reducerPath]: subCategorySlice.reducer,
     [subScribeSlice.reducerPath]: subScribeSlice.reducer,
+    [productCompareSlice.reducerPath]: productCompareSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -29,7 +31,9 @@ const store = configureStore({
       .concat(orderSlice.middleware)
       .concat(categorySlice.middleware)
       .concat(subCategorySlice.middleware)
-      .concat(subScribeSlice.middleware),
+      .concat(subScribeSlice.middleware)
+      .concat(productCompareSlice.middleware),
+
 });
 
 export default store;

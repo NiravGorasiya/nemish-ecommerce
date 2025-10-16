@@ -1,9 +1,12 @@
 const sequelize = require("../../models/sequelize/");
 const { findCustomerByEmail } = require("../../queries/customer/customer");
-const { findModelItemQ } = require("../../queries/generic");
+const { findModelItemQ, updateModelItemQ } = require("../../queries/generic");
 const { findUserByEmail } = require("../../queries/users");
 const { signJWT } = require("../../utils/jwtutils");
-const { encryptPassword, comparePasswords } = require("../../utils/passwordutility");
+const {
+  encryptPassword,
+  comparePasswords,
+} = require("../../utils/passwordutility");
 
 const customerSignupCtrl = async (ctrlData) => {
   try {
@@ -19,7 +22,10 @@ const customerSignupCtrl = async (ctrlData) => {
       await newUser.save();
       return newUser;
     } else {
-      const result = await comparePasswords(ctrlData.password, existingUser.password);
+      const result = await comparePasswords(
+        ctrlData.password,
+        existingUser.password
+      );
       const updateUser = await findModelItemQ("Customer", {
         where: { Id: existingUser.Id },
       });
@@ -31,6 +37,35 @@ const customerSignupCtrl = async (ctrlData) => {
   }
 };
 
+const loginController = async ({ email, password }, next) => {
+  try {
+    console.log(email, password, "email password");
+
+    let user = await findUserByEmail(email);
+
+    if (user !== null) {
+      const result = await comparePasswords(password, user.userPassword);
+
+      if (result === true) {
+        const updateUser = await findModelItemQ("Customer", {
+          where: { Id: user.Id },
+        });
+        const loginJwt = signJWT({ user: { userId: user.Id } });
+        await updateModelItemQ("Customer", { loginJwt }, { Id: user.Id });
+
+        return { token: loginJwt, user: updateUser };
+      } else {
+        throw new UnauthorizedError();
+      }
+    } else {
+      throw new UserNotFoundError();
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
-  customerSignupCtrl
+  customerSignupCtrl,
+  loginController,
 };

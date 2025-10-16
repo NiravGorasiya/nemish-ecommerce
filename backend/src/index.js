@@ -6,10 +6,14 @@ const morgan = require("morgan");
 const handleErrors = require("./middlewares/handleErrors");
 const path = require("path")
 const cors = require('cors')
+const { swaggerUi, swaggerSpec } = require("../swagger.js");
 
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors())
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 const adminRoute = require("./router/Admin/index");
 const userRoute = require("./router/User/index")

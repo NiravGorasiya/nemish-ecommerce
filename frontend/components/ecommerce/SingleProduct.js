@@ -9,6 +9,7 @@ import { addToWishlist } from "../../redux/action/wishlistAction";
 import Loader from "./../elements/Loader";
 import { useAddCartItemMutation } from "../../redux/reducer/cartSlice";
 import { useCreateWishlistItemMutation } from "../../redux/reducer/wishlistSlice";
+import { useCreateProductCompareItemMutation } from "../../redux/reducer/productCompareSlice";
 
 const SingleProduct = ({
   product,
@@ -21,6 +22,7 @@ const SingleProduct = ({
   const [addCartItem, { isLoading, isSuccess, error }] =
     useAddCartItemMutation();
   const [createWishlistItem] = useCreateWishlistItemMutation();
+  const [createProductCompareItem] = useCreateProductCompareItemMutation();
 
   useEffect(() => {
     setLoading(true);
@@ -39,8 +41,8 @@ const SingleProduct = ({
   };
 
   const handleCompare = (product) => {
-    addToCompare(product);
-    toast.success("Add to Compare !");
+    createProductCompareItem({productId:product.Id});
+    toast.success("Add Compare Product!");
   };
 
   const handleWishlist = (product) => {
@@ -118,7 +120,7 @@ const SingleProduct = ({
                 </span>
               </div>
               <div className="product-price">
-                <span>${product.price} </span>
+                <span>{product.price} </span>
                 <span className="old-price">
                   {product.oldPrice ? `$ ${product.oldPrice}` : null}
                 </span>
@@ -141,12 +143,5 @@ const SingleProduct = ({
     </>
   );
 };
-
-// const mapDispatchToProps = {
-//   addToCart,
-//   addToCompare,
-//   addToWishlist,
-//   openQuickView,
-// };
 
 export default SingleProduct;
